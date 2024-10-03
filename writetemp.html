@@ -1,0 +1,1960 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVDQ Manager - Write Up Templates</title>
+
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+
+        #wrapper {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Sidebar Styles */
+        .sidebar {
+            width: 250px;
+            background-color: #4e73df;
+            color: #fff;
+            flex-shrink: 0;
+            transition: all 0.3s;
+            overflow-y: auto;
+        }
+
+        .sidebar .sidebar-brand {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+            background-color: #2e59d9;
+        }
+
+        .sidebar .nav-link {
+            color: #fff;
+            padding: 0.75rem 1.25rem;
+            display: flex;
+            align-items: center;
+            transition: background 0.3s;
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #1d2c8a;
+            text-decoration: none;
+        }
+
+        .sidebar .nav-link i {
+            margin-right: 0.75rem;
+        }
+
+        .sidebar .collapse .nav-link {
+            padding-left: 2.5rem;
+        }
+
+        /* Content Styles */
+        #content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Topbar Styles */
+        .topbar {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Main Content */
+        .container-fluid {
+            padding: 2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            background-color: #4e73df;
+            color: #fff;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+
+        /* Footer Styles */
+        .footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        /* Template Options Styles */
+        .template-options {
+            display: none;
+            margin-top: 20px;
+        }
+
+        /* Modal Styles */
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Scrollbar Styles for Sidebar */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #4e73df;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background-color: #2e59d9;
+            border-radius: 10px;
+        }
+    </style>
+
+    <!-- Bootstrap 5.3 JS and Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        // Open Folder Function (Requires Backend Support)
+        function openFolder(path) {
+            if (window.pywebview && window.pywebview.api) {
+                window.pywebview.api.open_folder(path);
+            } else {
+                alert('Folder access is not supported in this environment.');
+            }
+        }
+
+        // Open Window Function
+        function openWindow(url) {
+            const width = 1100;
+            const height = 800;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+
+            window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
+        }
+
+        // Update Date and Time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const formattedDateTime = now.toLocaleString('en-US', options);
+            document.getElementById('datetime').innerText = formattedDateTime;
+        }
+        setInterval(updateDateTime, 1000);
+        document.addEventListener('DOMContentLoaded', updateDateTime);
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+        <!-- Sidebar -->
+        <nav class="sidebar d-flex flex-column">
+            <ul class="nav flex-column mt-4">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html">
+                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                    </a>
+                </li>
+                <!-- Employee Management -->
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="openWindow('https://script.google.com/macros/s/AKfycbyBJPhHge6kVOjpiOCCtuTfyRRR7dbmaeAuTPurjUbJkEG2MNPLQCLk3MCFAtBVSLPY/exec')">
+                        <i class="fas fa-address-book"></i> Business Directory
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="emailtemp.html"><i class="fas fa-envelope"></i> Email Templates</a></li>
+                <li class="nav-item"><a class="nav-link" href="writetemp.html"><i class="fas fa-file-alt"></i> Write Up Templates</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="javascript:void(0);" onclick="openWindow('https://script.google.com/macros/s/AKfycbzy2NIfKJCEeSugpPvbuRzqAf6rZ8K6fheL4PMMB3WA8uQDN6ibbquM7scfTtNwwgGg/exec')">
+                        <i class="fas fa-tools"></i> Troubleshooting Guides
+                    </a>
+                </li>
+                <li class="nav-item"><a class="nav-link" href="meeting.html"><i class="fas fa-comments"></i> Meeting Topics</a></li>
+                            <li class="nav-item"><a class="nav-link" href="shopping.html"><i class="fas fa-shopping-cart"></i> Shopping List</a></li>
+
+                <!-- Store Management -->
+                <li class="nav-item">
+                    <a class="nav-link" href="#storeManagement" data-bs-toggle="collapse" aria-expanded="false">
+                        <i class="fas fa-store"></i> Store Management
+                    </a>
+                    <div class="collapse" id="storeManagement">
+                        <ul class="nav flex-column ms-3">
+                            <li class="nav-item"><a class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdyCmdRINv3d4swrR7SIqqmsg4hLsDZvRGCHNtkPIX8qjKvEQ/viewform?usp=sf_link" target="_blank"><i class="fas fa-wrench"></i> Equipment Logs</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link" target="_blank"><i class="fas fa-trash"></i> Garbage / Recycling</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLSf1oiARDYknazjg3BIL9SuBxTkJ5vV91wwQ0iLUxoMfo4qXWQ/viewform?usp=sf_link" target="_blank"><i class="fas fa-recycle"></i> Waste Reporting</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://docs.google.com/forms/d/e/1FAIpQLSdFwJ37JReVOUQrmVnIE6p5I3sPRvoqb5X-7DRJgIrBV_kjMA/viewform?usp=sf_link" target="_blank"><i class="fas fa-exclamation-circle"></i> Complaint Entry</a></li>
+                            <li class="nav-item"><a class="nav-link" href="https://docs.google.com/spreadsheets/d/1lqTJfWhLGd-kTf3Jy--JVs8JB4BS3Y-LvNpj1dtu98Y/edit?usp=sharing" target="_blank"><i class="fas fa-dollar-sign"></i> Price Sheet</a></li>
+                        </ul>
+                    </div>
+                </li>
+                <!-- Additional Links -->
+                <!-- You can add more navigation items here -->
+            </ul>
+        </nav>
+        <!-- End of Sidebar -->
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+            <!-- Main Content -->
+            <div id="content">
+
+                <!-- Topbar -->
+                <nav class="topbar">
+                    <div id="datetime" class="fw-bold"></div>
+                    <button class="btn btn-primary d-md-none" id="sidebarToggle">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </nav>
+                <!-- End of Topbar -->
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    <h1 class="h3 mb-4 text-gray-800">Write Up Templates</h1>
+
+                    <!-- Template Selection Card -->
+                    <div class="card shadow mb-4">
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">Select Issue Type</h6>
+                        </div>
+                        <div class="card-body">
+                            <!-- Template Selection Dropdown -->
+                            <div class="mb-3">
+                                <select id="template-select" class="form-select">
+                                    <option value="" selected disabled>Select a template</option>
+                                    <option value="template1">Excessive Absenteeism</option>
+                                    <option value="template2">Tardiness</option>
+                                    <option value="template3">Insubordination</option>
+                                    <option value="template4">Poor Performance</option>
+                                    <option value="template5">Violation of Company Policies</option>
+                                    <option value="template6">Unprofessional Behavior</option>
+                                    <option value="template7">Harassment/Bullying</option>
+                                    <option value="template8">Dress Code Violations</option>
+                                    <option value="template9">Booking Time Off</option>
+                                    <option value="template10">Unsafe Work Practices</option>
+                                    <option value="template11">Conflict Resolution</option>
+                                    <option value="template12">Lack of Teamwork</option>
+<option value="template13">No Call, No Show</option>
+<option value="template14">Called in After Cut Off Period</option>
+<option value="template15">Improper Call-in Procedure</option>
+<option value="template16">Unsanitary Practices</option>
+<option value="template17">Did Not Follow a Certain Policy</option>
+                                </select>
+                            </div>
+
+                            <!-- Template Forms -->
+                            <!-- Template 1: Excessive Absenteeism -->
+                            <div class="template-options" id="template1-options">
+                                <h2>Excessive Absenteeism</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select1" class="form-label">Tone:</label>
+                                        <select id="tone-select1" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name1" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name1" class="form-control" placeholder="Billy">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date1" class="form-label">Date:</label>
+                                        <input type="date" id="date1" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="time-period1" class="form-label">Time Period:</label>
+                                        <input type="text" id="time-period1" class="form-control" placeholder="January through August">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="num-absences1" class="form-label">Number of Absences:</label>
+                                        <input type="number" id="num-absences1" class="form-control" placeholder="# of absences in time period" min="0">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template1')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 2: Tardiness -->
+                            <div class="template-options" id="template2-options">
+                                <h2>Tardiness</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select2" class="form-label">Tone:</label>
+                                        <select id="tone-select2" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name2" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name2" class="form-control" placeholder="Steve">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date2" class="form-label">Date:</label>
+                                        <input type="date" id="date2" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="time-period2" class="form-label">Time Period:</label>
+                                        <input type="text" id="time-period2" class="form-control" placeholder="January through August">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="num-occasions2" class="form-label">Number of Occasions:</label>
+                                        <input type="number" id="num-occasions2" class="form-control" placeholder="# of occasions in time period" min="0">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template2')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 3: Insubordination -->
+                            <div class="template-options" id="template3-options">
+                                <h2>Insubordination</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select3" class="form-label">Tone:</label>
+                                        <select id="tone-select3" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name3" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name3" class="form-control" placeholder="Emily">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date3" class="form-label">Date:</label>
+                                        <input type="date" id="date3" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="instances3" class="form-label">Specific Instances or Behavior:</label>
+                                        <input type="text" id="instances3" class="form-control" placeholder="not following instructions">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template3')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 4: Poor Performance -->
+                            <div class="template-options" id="template4-options">
+                                <h2>Poor Performance</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select4" class="form-label">Tone:</label>
+                                        <select id="tone-select4" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name4" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name4" class="form-control" placeholder="John">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date4" class="form-label">Date:</label>
+                                        <input type="date" id="date4" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="aspects4" class="form-label">Specific Aspects of Performance:</label>
+                                        <input type="text" id="aspects4" class="form-control" placeholder="quality of work, meeting goals">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template4')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 5: Violation of Company Policies -->
+                            <div class="template-options" id="template5-options">
+                                <h2>Violation of Company Policies</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select5" class="form-label">Tone:</label>
+                                        <select id="tone-select5" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name5" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name5" class="form-control" placeholder="Alex">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date5" class="form-label">Date:</label>
+                                        <input type="date" id="date5" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="policy5" class="form-label">Specific Policy or Behavior:</label>
+                                        <input type="text" id="policy5" class="form-control" placeholder="dress code, use of equipment">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template5')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 6: Unprofessional Behavior -->
+                            <div class="template-options" id="template6-options">
+                                <h2>Unprofessional Behavior</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select6" class="form-label">Tone:</label>
+                                        <select id="tone-select6" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name6" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name6" class="form-control" placeholder="Jordan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date6" class="form-label">Date:</label>
+                                        <input type="date" id="date6" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="behavior6" class="form-label">Specific Behavior:</label>
+                                        <input type="text" id="behavior6" class="form-control" placeholder="inappropriate comments">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template6')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 7: Harassment/Bullying -->
+                            <div class="template-options" id="template7-options">
+                                <h2>Harassment/Bullying</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select7" class="form-label">Tone:</label>
+                                        <select id="tone-select7" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name7" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name7" class="form-control" placeholder="Jordan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date7" class="form-label">Date:</label>
+                                        <input type="date" id="date7" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="individualgroup7" class="form-label">Specific Individual or Group:</label>
+                                        <input type="text" id="individualgroup7" class="form-control" placeholder="Sam or Team A">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="nature7" class="form-label">Nature of Harassment/Bullying:</label>
+                                        <input type="text" id="nature7" class="form-control" placeholder="verbal harassment">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template7')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 8: Dress Code Violations -->
+                            <div class="template-options" id="template8-options">
+                                <h2>Dress Code Violation</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select8" class="form-label">Tone:</label>
+                                        <select id="tone-select8" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name8" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name8" class="form-control" placeholder="Jordan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date8" class="form-label">Date:</label>
+                                        <input type="date" id="date8" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="violation8" class="form-label">Specific Dress Code Violation:</label>
+                                        <input type="text" id="violation8" class="form-control" placeholder="wearing inappropriate clothing">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template8')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 9: Booking Time Off -->
+                            <div class="template-options" id="template9-options">
+                                <h2>Time Off Booking Procedure</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select9" class="form-label">Tone:</label>
+                                        <select id="tone-select9" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name9" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name9" class="form-control" placeholder="Jordan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date9" class="form-label">Date:</label>
+                                        <input type="date" id="date9" class="form-control">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template9')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 10: Unsafe Work Practices -->
+                            <div class="template-options" id="template10-options">
+                                <h2>Unsafe Work Practices</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select10" class="form-label">Tone:</label>
+                                        <select id="tone-select10" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name10" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name10" class="form-control" placeholder="Taylor">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date10" class="form-label">Date:</label>
+                                        <input type="date" id="date10" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="behavior10" class="form-label">Specific Unsafe Behavior or Practice:</label>
+                                        <input type="text" id="behavior10" class="form-control" placeholder="Not wearing safety gloves">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template10')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 11: Conflict Resolution -->
+                            <div class="template-options" id="template11-options">
+                                <h2>Conflict Resolution</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select11" class="form-label">Tone:</label>
+                                        <select id="tone-select11" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name11" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name11" class="form-control" placeholder="Taylor">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date11" class="form-label">Date:</label>
+                                        <input type="date" id="date11" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="other-employee11" class="form-label">Other Employee’s Name (if applicable):</label>
+                                        <input type="text" id="other-employee11" class="form-control" placeholder="Jordan">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="issue11" class="form-label">Specific Issue or Conflict:</label>
+                                        <input type="text" id="issue11" class="form-control" placeholder="Communication breakdown">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template11')">Generate Write Up</button>
+                                </form>
+                            </div>
+
+                            <!-- Template 12: Lack of Teamwork -->
+                            <div class="template-options" id="template12-options">
+                                <h2>Lack of Teamwork</h2>
+                                <form>
+                                    <div class="mb-3">
+                                        <label for="tone-select12" class="form-label">Tone:</label>
+                                        <select id="tone-select12" class="form-select">
+                                            <option value="" selected disabled>Select a tone for the letter</option>
+                                            <option value="casual">Casual</option>
+                                            <option value="formal">Formal</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="employee-name12" class="form-label">Name of Employee:</label>
+                                        <input type="text" id="employee-name12" class="form-control" placeholder="Taylor">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="date12" class="form-label">Date:</label>
+                                        <input type="date" id="date12" class="form-control">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="project-task12" class="form-label">Specific Project or Task:</label>
+                                        <input type="text" id="project-task12" class="form-control" placeholder="Summer Promotion">
+                                    </div>
+                                    <button type="button" class="btn btn-primary" onclick="generateWriteUp('template12')">Generate Write Up</button>
+                                </form>
+                            </div>
+<!-- Template 13: No Call, No Show -->
+<div class="template-options" id="template13-options">
+    <h2>No Call, No Show</h2>
+    <form>
+        <div class="mb-3">
+            <label for="tone-select13" class="form-label">Tone:</label>
+            <select id="tone-select13" class="form-select">
+                <option value="" selected disabled>Select a tone for the letter</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="employee-name13" class="form-label">Name of Employee:</label>
+            <input type="text" id="employee-name13" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="mb-3">
+            <label for="date13" class="form-label">Date of No Show:</label>
+            <input type="date" id="date13" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="shift13" class="form-label">Shift Missed:</label>
+            <input type="text" id="shift13" class="form-control" placeholder="e.g., morning shift">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateWriteUp('template13')">Generate Write Up</button>
+    </form>
+</div>
+<!-- Template 14: Called in After Cut Off Period -->
+<div class="template-options" id="template14-options">
+    <h2>Called in After Cut Off Period</h2>
+    <form>
+        <div class="mb-3">
+            <label for="tone-select14" class="form-label">Tone:</label>
+            <select id="tone-select14" class="form-select">
+                <option value="" selected disabled>Select a tone for the letter</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="employee-name14" class="form-label">Name of Employee:</label>
+            <input type="text" id="employee-name14" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="mb-3">
+            <label for="date14" class="form-label">Date of Incident:</label>
+            <input type="date" id="date14" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="shift14" class="form-label">Shift Type:</label>
+            <select id="shift14" class="form-select">
+                <option value="" selected disabled>Select Shift Type</option>
+                <option value="day">Day Shift</option>
+                <option value="night">Night Shift</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="call-time14" class="form-label">Time Employee Called In:</label>
+            <input type="time" id="call-time14" class="form-control">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateWriteUp('template14')">Generate Write Up</button>
+    </form>
+</div>
+<!-- Template 15: Improper Call-in Procedure -->
+<div class="template-options" id="template15-options">
+    <h2>Improper Call-in Procedure</h2>
+    <form>
+        <div class="mb-3">
+            <label for="tone-select15" class="form-label">Tone:</label>
+            <select id="tone-select15" class="form-select">
+                <option value="" selected disabled>Select a tone for the letter</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="employee-name15" class="form-label">Name of Employee:</label>
+            <input type="text" id="employee-name15" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="mb-3">
+            <label for="date15" class="form-label">Date of Incident:</label>
+            <input type="date" id="date15" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="method15" class="form-label">Improper Method Used:</label>
+            <select id="method15" class="form-select">
+                <option value="" selected disabled>Select Method</option>
+                <option value="Facebook Message">Facebook Message</option>
+                <option value="Email">Email</option>
+                <option value="Text Message">Text Message</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="mb-3" id="other-method15-div" style="display: none;">
+            <label for="other-method15" class="form-label">Specify Other Method:</label>
+            <input type="text" id="other-method15" class="form-control" placeholder="Specify Method">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateWriteUp('template15')">Generate Write Up</button>
+    </form>
+</div>
+<!-- Template 16: Unsanitary Practices -->
+<div class="template-options" id="template16-options">
+    <h2>Unsanitary Practices</h2>
+    <form>
+        <div class="mb-3">
+            <label for="tone-select16" class="form-label">Tone:</label>
+            <select id="tone-select16" class="form-select">
+                <option value="" selected disabled>Select a tone for the letter</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="employee-name16" class="form-label">Name of Employee:</label>
+            <input type="text" id="employee-name16" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="mb-3">
+            <label for="date16" class="form-label">Date of Incident:</label>
+            <input type="date" id="date16" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="practice16" class="form-label">Unsanitary Practice Observed:</label>
+            <input type="text" id="practice16" class="form-control" placeholder="e.g., not washing hands">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateWriteUp('template16')">Generate Write Up</button>
+    </form>
+</div>
+<!-- Template 17: Did Not Follow a Certain Policy -->
+<div class="template-options" id="template17-options">
+    <h2>Did Not Follow a Certain Policy</h2>
+    <form>
+        <div class="mb-3">
+            <label for="tone-select17" class="form-label">Tone:</label>
+            <select id="tone-select17" class="form-select">
+                <option value="" selected disabled>Select a tone for the letter</option>
+                <option value="casual">Casual</option>
+                <option value="formal">Formal</option>
+            </select>
+        </div>
+        <div class="mb-3">
+            <label for="employee-name17" class="form-label">Name of Employee:</label>
+            <input type="text" id="employee-name17" class="form-control" placeholder="Employee Name">
+        </div>
+        <div class="mb-3">
+            <label for="date17" class="form-label">Date of Incident:</label>
+            <input type="date" id="date17" class="form-control">
+        </div>
+        <div class="mb-3">
+            <label for="policy17" class="form-label">Policy Not Followed:</label>
+            <input type="text" id="policy17" class="form-control" placeholder="e.g., Cell Phone Use Policy">
+        </div>
+        <button type="button" class="btn btn-primary" onclick="generateWriteUp('template17')">Generate Write Up</button>
+    </form>
+</div>
+
+
+
+
+                        </div>
+                    </div>
+
+                    <!-- Bootstrap Modal for Write Up Display -->
+                    <div class="modal fade" id="writeUpModal" tabindex="-1" aria-labelledby="writeUpModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="writeUpModalLabel">Generated Write Up</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <pre id="writeUpContent"></pre>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                    <button type="button" class="btn btn-success" onclick="downloadWriteUp()">Download Write Up</button>
+                                    <button type="button" class="btn btn-outline-primary" onclick="copyWriteUp()">Copy to Clipboard</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.container-fluid -->
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="footer">
+                &copy; 2024 Dairy Queen Courtenay Manager's Dashboard. All rights reserved.
+            </footer>
+            <!-- End of Footer -->
+        </div>
+        <!-- End of Content Wrapper -->
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="logoutModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 id="logoutModalLabel" class="modal-title">Ready to Leave?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Scripts -->
+    <script>
+// Show/hide 'Specify Other Method' field for Template 15
+document.getElementById('method15').addEventListener('change', function() {
+    const otherDiv = document.getElementById('other-method15-div');
+    if (this.value === 'Other') {
+        otherDiv.style.display = 'block';
+    } else {
+        otherDiv.style.display = 'none';
+    }
+});
+
+        // Sidebar Toggle for Mobile
+        document.getElementById('sidebarToggle').addEventListener('click', function () {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+
+        // Template Selection Script
+        document.getElementById('template-select').addEventListener('change', function () {
+            const selectedTemplate = this.value;
+            document.querySelectorAll('.template-options').forEach(el => el.style.display = 'none');
+            if (selectedTemplate) {
+                document.getElementById(`${selectedTemplate}-options`).style.display = 'block';
+            }
+        });
+
+        // Generate Write Up Function
+        function generateWriteUp(templateId) {
+            let content = '';
+
+            switch (templateId) {
+                case 'template1':
+                    content = generateTemplate1();
+                    break;
+                case 'template2':
+                    content = generateTemplate2();
+                    break;
+                case 'template3':
+                    content = generateTemplate3();
+                    break;
+                case 'template4':
+                    content = generateTemplate4();
+                    break;
+                case 'template5':
+                    content = generateTemplate5();
+                    break;
+                case 'template6':
+                    content = generateTemplate6();
+                    break;
+                case 'template7':
+                    content = generateTemplate7();
+                    break;
+                case 'template8':
+                    content = generateTemplate8();
+                    break;
+                case 'template9':
+                    content = generateTemplate9();
+                    break;
+                case 'template10':
+                    content = generateTemplate10();
+                    break;
+                case 'template11':
+                    content = generateTemplate11();
+                    break;
+                case 'template12':
+                    content = generateTemplate12();
+                    break;
+        case 'template13':
+            content = generateTemplate13();
+            break;
+        case 'template14':
+            content = generateTemplate14();
+            break;
+        case 'template15':
+            content = generateTemplate15();
+            break;
+        case 'template16':
+            content = generateTemplate16();
+            break;
+        case 'template17':
+            content = generateTemplate17();
+            break;
+                default:
+                    content = 'Invalid template selected.';
+            }
+
+            if (content !== '') {
+                // Display the content in the modal
+                document.getElementById('writeUpContent').innerText = content;
+                const writeUpModal = new bootstrap.Modal(document.getElementById('writeUpModal'));
+                writeUpModal.show();
+            }
+        }
+
+        // Template Generators
+        function generateTemplate1() {
+            const tone = document.getElementById('tone-select1').value;
+            const name = document.getElementById('employee-name1').value.trim();
+            const date = document.getElementById('date1').value;
+            const period = document.getElementById('time-period1').value.trim();
+            const absences = document.getElementById('num-absences1').value;
+
+            if (!tone || !name || !date || !period || absences === '') {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Attendance Concern
+
+Hey ${name},
+
+I hope you’re doing well. I wanted to touch base about your recent attendance. We’ve noticed that you’ve had ${absences} absences over the past ${period}, and it’s starting to impact the team’s workflow.
+
+We understand that things come up, but consistent attendance is crucial for us to keep everything running smoothly. Please let us know if there’s something we can do to help or if you’re having any issues.
+
+We need you to make an effort to improve your attendance going forward. If this continues, we might need to discuss further steps.
+
+Thanks for understanding!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Excessive Absenteeism
+
+Dear ${name},
+
+I am writing to formally address a concern regarding your recent attendance at Dairy Queen Courtenay. Specifically, there have been ${absences} instances of absenteeism over the past ${period}, which is affecting the efficiency and productivity of our team.
+
+Regular attendance is essential to ensure smooth operations and adequate staffing levels. Please provide any explanations or documentation regarding these absences, and let us know if there are any underlying issues we should be aware of.
+
+It is important that you improve your attendance moving forward. Failure to do so may result in further disciplinary actions.
+
+Thank you for your prompt attention to this matter.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate2() {
+            const tone = document.getElementById('tone-select2').value;
+            const name = document.getElementById('employee-name2').value.trim();
+            const date = document.getElementById('date2').value;
+            const period = document.getElementById('time-period2').value.trim();
+            const occasions = document.getElementById('num-occasions2').value;
+
+            if (!tone || !name || !date || !period || occasions === '') {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Time Management Concern
+
+Hey ${name},
+
+Just wanted to have a quick chat about your recent punctuality. We’ve noticed you’ve been arriving late on ${occasions} occasions over the past ${period}. It’s important for us to start on time so we can keep everything running smoothly.
+
+If there’s something causing these delays or if you’re facing any issues, let us know. We’re here to help if we can. We just need you to make an effort to be on time from now on.
+
+Thanks for your attention to this!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Concern Regarding Tardiness
+
+Dear ${name},
+
+I am writing to formally address a concern regarding your punctuality at Dairy Queen Courtenay. There have been ${occasions} instances of tardiness over the past ${period}, which is affecting the team’s ability to start shifts and complete tasks efficiently.
+
+Timeliness is crucial to maintaining smooth operations and ensuring that all team members can fulfill their roles effectively. Please provide any information regarding the reasons for these delays and any steps you are taking to address them.
+
+It is imperative that you adhere to your scheduled start times moving forward. Continued tardiness may result in further disciplinary actions.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate3() {
+            const tone = document.getElementById('tone-select3').value;
+            const name = document.getElementById('employee-name3').value.trim();
+            const date = document.getElementById('date3').value;
+            const instances = document.getElementById('instances3').value.trim();
+
+            if (!tone || !name || !date || !instances) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Concern Regarding Insubordination
+
+Hey ${name},
+
+I need to talk to you about some recent behavior that has been concerning. We’ve noticed that you’ve been ${instances} recently. It's important for us to maintain a positive and productive work environment, and this behavior is affecting the team.
+
+If there’s anything you’d like to discuss or if you need support, please come see me so we can sort it out. We all need to work well together.
+
+Thanks for your attention to this matter!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Formal Concern Regarding Insubordination
+
+Dear ${name},
+
+I am writing to formally address a concern regarding your recent conduct at Dairy Queen Courtenay. Specifically, there have been instances where you were observed ${instances}. Such behavior is contrary to our expectations and standards for maintaining a professional and cooperative work environment.
+
+It is important that you address this issue promptly and make the necessary adjustments to align with company expectations. Failure to do so may result in further disciplinary actions.
+
+Thank you for your immediate attention to this matter.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate4() {
+            const tone = document.getElementById('tone-select4').value;
+            const name = document.getElementById('employee-name4').value.trim();
+            const date = document.getElementById('date4').value;
+            const aspects = document.getElementById('aspects4').value.trim();
+
+            if (!tone || !name || !date || !aspects) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Performance Review
+
+Hey ${name},
+
+I wanted to touch base about your recent performance at Dairy Queen Courtenay. We’ve noticed that there have been some issues with ${aspects}, and it’s affecting the team’s overall efficiency.
+
+We understand that everyone has off days, but we need to address this to make sure we’re all on the same page. If there’s anything you’re struggling with or if you need support, please let me know. We’re here to help you succeed.
+
+Let’s work together to get things back on track. Thanks for your attention to this!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Performance Concern
+
+Dear ${name},
+
+I am writing to formally address concerns regarding your recent performance at Dairy Queen Courtenay. Specifically, there have been issues with ${aspects}, which have impacted the effectiveness of our operations.
+
+It is essential that performance standards are met to ensure the smooth functioning of our team. Please review the specific areas where improvement is needed and outline any support or resources you may require to enhance your performance.
+
+Failure to show improvement may result in further disciplinary actions. We are committed to helping you succeed and expect to see progress in these areas.
+
+Thank you for your attention to this matter.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate5() {
+            const tone = document.getElementById('tone-select5').value;
+            const name = document.getElementById('employee-name5').value.trim();
+            const date = document.getElementById('date5').value;
+            const policy = document.getElementById('policy5').value.trim();
+
+            if (!tone || !name || !date || !policy) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Policy Violation
+
+Hey ${name},
+
+I wanted to chat with you about something important. It’s come to our attention that there was a recent violation of company policies regarding ${policy}.
+
+We need everyone to follow our guidelines to keep things running smoothly and ensure fairness for everyone. If you’re unsure about any of the policies or have any questions, feel free to reach out. We’re here to help clarify things.
+
+Please make sure to adhere to our policies moving forward. Thanks for your understanding!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Violation of Company Policies
+
+Dear ${name},
+
+I am writing to formally address a violation of company policies at Dairy Queen Courtenay. Specifically, there has been an infringement regarding ${policy}.
+
+Adhering to company policies is critical for maintaining operational standards and ensuring a professional work environment. Please review the relevant policy and make the necessary adjustments to comply with our standards.
+
+Failure to adhere to the policies may result in further disciplinary actions. We appreciate your immediate attention to this matter.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate6() {
+            const tone = document.getElementById('tone-select6').value;
+            const name = document.getElementById('employee-name6').value.trim();
+            const date = document.getElementById('date6').value;
+            const behavior = document.getElementById('behavior6').value.trim();
+
+            if (!tone || !name || !date || !behavior) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Professional Conduct
+
+Hey ${name},
+
+I need to talk to you about some recent behavior that’s been a bit unprofessional. We’ve noticed ${behavior} hasn’t been followed properly. It’s important for everyone to stick to our dress code to keep things looking professional and consistent at Dairy Queen Courtenay. Please make sure to follow the dress code guidelines from now on.
+
+If you have any questions or need clarification on what’s acceptable, feel free to ask. Thanks for your cooperation!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Concern Regarding Unprofessional Behavior
+
+Dear ${name},
+
+I am writing to formally address a concern regarding unprofessional behavior observed at Dairy Queen Courtenay. Specifically, there have been instances of ${behavior}, which are inconsistent with our standards for workplace conduct.
+
+Maintaining a professional and respectful environment is essential for effective teamwork and overall workplace morale. Please address this behavior immediately and adhere to our standards of professionalism.
+
+Continued unprofessional conduct may lead to further disciplinary actions. We expect improvements in your behavior going forward.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate7() {
+            const tone = document.getElementById('tone-select7').value;
+            const name = document.getElementById('employee-name7').value.trim();
+            const date = document.getElementById('date7').value;
+            const individualgroup = document.getElementById('individualgroup7').value.trim();
+            const nature = document.getElementById('nature7').value.trim();
+
+            if (!tone || !name || !date || !individualgroup || !nature) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Important: Harassment/Bullying Concern
+
+Hey ${name},
+
+I need to address a serious issue. We’ve received reports about some behavior that’s been considered harassment or bullying towards ${individualgroup}. This kind of behavior is not acceptable at Dairy Queen Courtenay.
+
+We want to make sure everyone feels safe and respected at work. If there’s something you’d like to discuss or if you need support, please come talk to me directly. It’s important that we all treat each other with kindness and respect.
+
+Please make sure to avoid any behavior that could be seen as harassment or bullying moving forward. Thanks for understanding.
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Harassment/Bullying Incident
+
+Dear ${name},
+
+I am writing to formally address a serious concern regarding harassment and/or bullying at Dairy Queen Courtenay. It has come to our attention that there have been incidents involving ${individualgroup} that are classified as ${nature}.
+
+Maintaining a respectful and safe work environment is crucial for all employees. Such behavior is in violation of our company policies and is not tolerated. We request that you cease any actions that could be perceived as harassment or bullying immediately.
+
+Please be aware that continued incidents may result in further disciplinary actions. We expect a prompt and respectful resolution to this matter.
+
+Thank you for your immediate attention to this issue.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate8() {
+            const tone = document.getElementById('tone-select8').value;
+            const name = document.getElementById('employee-name8').value.trim();
+            const date = document.getElementById('date8').value;
+            const violation = document.getElementById('violation8').value.trim();
+
+            if (!tone || !name || !date || !violation) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Dress Code Reminder
+
+Hey ${name},
+
+Just a quick note about our dress code. We’ve noticed that there’s been a recent issue with ${violation}.
+
+It’s important for everyone to stick to our dress code to keep things looking professional and consistent at Dairy Queen Courtenay. Please make sure to follow the dress code guidelines from now on.
+
+If you have any questions or need clarification on what’s acceptable, feel free to ask. Thanks for your cooperation!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Dress Code Violation
+
+Dear ${name},
+
+I am writing to formally address a violation of our dress code policy at Dairy Queen Courtenay. Specifically, there has been an issue with ${violation}.
+
+Adhering to the dress code is essential for maintaining a professional appearance and ensuring consistency across our team. Please review the dress code policy and make the necessary adjustments to comply with our standards.
+
+Failure to adhere to the dress code may result in further disciplinary actions. We appreciate your immediate attention to this matter.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate9() {
+            const tone = document.getElementById('tone-select9').value;
+            const name = document.getElementById('employee-name9').value.trim();
+            const date = document.getElementById('date9').value;
+
+            if (!tone || !name || !date) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Time Off Booking Reminder
+
+Hey ${name},
+
+Just a quick reminder about booking time off. If you need to take some time off, make sure to use the "Book Off" book in the office. The cutoff for booking time off is every Thursday for the upcoming week’s schedule.
+
+It’s your responsibility to book your time off on time, and we can’t make exceptions if you forget. If you miss the deadline, please find a replacement for your shift.
+
+Let me know if you have any questions about the procedure. Thanks for staying on top of this!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Time Off Booking Procedure
+
+Dear ${name},
+
+I am writing to remind you of the procedure for booking time off at Dairy Queen Courtenay. To request time off, you must use the "Book Off" book located in the office. Please ensure that all time off requests are made by the cutoff date, which is Thursday each week for the upcoming schedule.
+
+It is your responsibility to adhere to this booking procedure. Unfortunately, we cannot accommodate requests if the deadline is missed. Should you fail to book your time off in advance, it will be necessary for you to arrange for a replacement for your shift.
+
+Should you have any questions regarding this procedure, please do not hesitate to contact me. Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate10() {
+            const tone = document.getElementById('tone-select10').value;
+            const name = document.getElementById('employee-name10').value.trim();
+            const date = document.getElementById('date10').value;
+            const behavior = document.getElementById('behavior10').value.trim();
+
+            if (!tone || !name || !date || !behavior) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Safety Practices Reminder
+
+Hey ${name},
+
+I wanted to chat with you about some recent safety practices. We’ve noticed that ${behavior} hasn’t been followed properly. It’s important to stick to our safety guidelines to keep everyone safe and prevent accidents.
+
+Please make sure to follow all safety procedures and use the proper equipment. If you have any questions about the safety practices or need a refresher, just let me know.
+
+Thanks for helping us keep a safe work environment!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Unsafe Work Practices
+
+Dear ${name},
+
+I am writing to formally address concerns regarding unsafe work practices observed at Dairy Queen Courtenay. Specifically, there have been instances of ${behavior}, which are inconsistent with our established safety protocols.
+
+Ensuring adherence to safety procedures is critical to maintaining a secure work environment and preventing accidents. Please review the relevant safety guidelines and take immediate corrective actions to comply with these practices.
+
+Failure to follow safety procedures may result in further disciplinary measures. We appreciate your prompt attention to this matter.
+
+Thank you for your cooperation.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate11() {
+            const tone = document.getElementById('tone-select11').value;
+            const name = document.getElementById('employee-name11').value.trim();
+            const date = document.getElementById('date11').value;
+            const otherEmployee = document.getElementById('other-employee11').value.trim();
+            const issue = document.getElementById('issue11').value.trim();
+
+            if (!tone || !name || !date || !otherEmployee || !issue) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Resolving Conflicts
+
+Hey ${name},
+
+I wanted to address a recent conflict between you and ${otherEmployee}. We’ve noticed some tension that’s affecting the work environment.
+
+It’s important for us to work through these issues together. Please come see me so we can discuss and resolve the matter. We all need to be able to work well together.
+
+Thanks for your understanding!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Conflict Resolution
+
+Dear ${name},
+
+I am writing to formally address a conflict involving you and ${otherEmployee} that has recently been observed at Dairy Queen Courtenay. Such conflicts can impact team dynamics and overall productivity.
+
+It is essential to resolve these issues professionally and constructively. Please arrange a meeting with me at your earliest convenience to discuss the matter and work towards a resolution.
+
+We expect a cooperative approach to resolving this conflict. Thank you for your attention to this important issue.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+        function generateTemplate12() {
+            const tone = document.getElementById('tone-select12').value;
+            const name = document.getElementById('employee-name12').value.trim();
+            const date = document.getElementById('date12').value;
+            const projectTask = document.getElementById('project-task12').value.trim();
+
+            if (!tone || !name || !date || !projectTask) {
+                alert('Please fill in all fields.');
+                return '';
+            }
+
+            if (tone === 'casual') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Teamwork
+
+Hey ${name},
+
+I wanted to talk about the recent teamwork on ${projectTask}. It seems like there’s been some difficulty working together, which is affecting the overall success of our projects.
+
+Let’s work on improving our collaboration and communication. If there’s something specific that’s causing issues or if you need help, let me know. We’re all in this together, and it’s important that we support each other.
+
+Thanks for your attention to this!
+
+Best,
+[Your Name]
+Manager`;
+            } else if (tone === 'formal') {
+                return `Dairy Queen Courtenay
+
+Date: ${date}
+
+To: ${name}
+
+Subject: Lack of Teamwork
+
+Dear ${name},
+
+I am writing to address concerns regarding a lack of effective teamwork observed in relation to ${projectTask}. Collaborative efforts are crucial for the success of our projects and overall team performance.
+
+Please review your approach to teamwork and make the necessary adjustments to improve cooperation and communication with your colleagues. It is essential to contribute effectively to team objectives.
+
+Continued issues with teamwork may result in further actions. We appreciate your immediate attention to this matter.
+
+Sincerely,
+[Your Name]
+Manager`;
+            } else {
+                return 'Invalid tone selected. Please choose either Casual or Formal.';
+            }
+        }
+
+function generateTemplate13() {
+    const tone = document.getElementById('tone-select13').value;
+    const name = document.getElementById('employee-name13').value.trim();
+    const date = document.getElementById('date13').value;
+    const shift = document.getElementById('shift13').value.trim();
+
+    if (!tone || !name || !date || !shift) {
+        alert('Please fill in all fields.');
+        return '';
+    }
+
+    if (tone === 'casual') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: No Call, No Show on ${date}
+
+Hey ${name},
+
+We noticed that you didn't show up for your scheduled ${shift} on ${date}, and we didn't receive any notice from you. Is everything okay?
+
+We rely on everyone's presence to keep things running smoothly, so please make sure to inform us ahead of time if you're unable to come in.
+
+Please reach out to me as soon as possible so we can discuss this.
+
+Thanks,
+[Your Name]
+Manager`;
+    } else if (tone === 'formal') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: No Call, No Show Incident on ${date}
+
+Dear ${name},
+
+I am writing to address a serious concern regarding your absence from your scheduled ${shift} on ${date} without prior notification.
+
+Failure to report for a scheduled shift without notice is a violation of company policy and disrupts our operations.
+
+Please contact me immediately to discuss this matter and provide an explanation for your absence.
+
+Sincerely,
+[Your Name]
+Manager`;
+    } else {
+        return 'Invalid tone selected. Please choose either Casual or Formal.';
+    }
+}
+
+
+function generateTemplate14() {
+    const tone = document.getElementById('tone-select14').value;
+    const name = document.getElementById('employee-name14').value.trim();
+    const date = document.getElementById('date14').value;
+    const shift = document.getElementById('shift14').value;
+    const callTime = document.getElementById('call-time14').value;
+
+    if (!tone || !name || !date || !shift || !callTime) {
+        alert('Please fill in all fields.');
+        return '';
+    }
+
+    const shiftCutoff = shift === 'day' ? '10:00 AM' : '4:00 PM';
+
+    if (tone === 'casual') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Late Call-In on ${date}
+
+Hey ${name},
+
+We received your call at ${callTime} regarding your inability to work your ${shift} shift on ${date}. Just a reminder, we require that you notify us before ${shiftCutoff} for ${shift} shifts.
+
+Let’s make sure to call in before the cutoff time in the future so we can adjust the schedule accordingly.
+
+Thanks for your understanding!
+
+Best,
+[Your Name]
+Manager`;
+    } else if (tone === 'formal') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Late Notification of Absence on ${date}
+
+Dear ${name},
+
+I am writing to address a concern regarding the late notification of your absence on ${date}. We received your call at ${callTime}, which is after the required cutoff time of ${shiftCutoff} for ${shift} shifts.
+
+Timely notification of absences is essential for us to manage staffing effectively. Please ensure that in the future, you notify us before the designated cutoff time.
+
+Failure to comply with this policy may result in further disciplinary action.
+
+Sincerely,
+[Your Name]
+Manager`;
+    } else {
+        return 'Invalid tone selected. Please choose either Casual or Formal.';
+    }
+}
+
+function generateTemplate15() {
+    const tone = document.getElementById('tone-select15').value;
+    const name = document.getElementById('employee-name15').value.trim();
+    const date = document.getElementById('date15').value;
+    let method = document.getElementById('method15').value;
+
+    if (!tone || !name || !date || !method) {
+        alert('Please fill in all fields.');
+        return '';
+    }
+
+    if (method === 'Other') {
+        method = document.getElementById('other-method15').value.trim();
+        if (!method) {
+            alert('Please specify the other method used.');
+            return '';
+        }
+    }
+
+    if (tone === 'casual') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Proper Call-in Procedure Reminder
+
+Hey ${name},
+
+Just wanted to remind you about the proper way to call in sick. On ${date}, we noticed you tried to notify us via ${method}, but we might not check that regularly.
+
+In the future, please make sure to call the store directly to let us know if you can't make it in. This helps us adjust the schedule more effectively.
+
+Thanks for understanding!
+
+Best,
+[Your Name]
+Manager`;
+    } else if (tone === 'formal') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Failure to Follow Proper Call-in Procedures
+
+Dear ${name},
+
+I am writing to address an issue concerning the notification of your absence on ${date}. You attempted to inform us via ${method}, which is not an approved method for reporting absences.
+
+Per company policy, all employees must notify the store directly by phone when unable to attend a scheduled shift. This ensures we receive timely notice and can make necessary adjustments.
+
+Please adhere to the proper call-in procedures in the future to avoid any misunderstandings or further disciplinary action.
+
+Sincerely,
+[Your Name]
+Manager`;
+    } else {
+        return 'Invalid tone selected. Please choose either Casual or Formal.';
+    }
+}
+
+
+function generateTemplate16() {
+    const tone = document.getElementById('tone-select16').value;
+    const name = document.getElementById('employee-name16').value.trim();
+    const date = document.getElementById('date16').value;
+    const practice = document.getElementById('practice16').value.trim();
+
+    if (!tone || !name || !date || !practice) {
+        alert('Please fill in all fields.');
+        return '';
+    }
+
+    if (tone === 'casual') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Reminder About Sanitary Practices
+
+Hey ${name},
+
+I wanted to chat with you about something important. On ${date}, we noticed that ${practice}.
+
+It's really important for us to follow all sanitary guidelines, especially since we handle food items like soft serve and burgers. This helps keep our customers safe and ensures we maintain high standards.
+
+Please make sure to follow all sanitary practices moving forward. If you have any questions, feel free to ask.
+
+Thanks for your cooperation!
+
+Best,
+[Your Name]
+Manager`;
+    } else if (tone === 'formal') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Unsanitary Practices Observed
+
+Dear ${name},
+
+I am writing to address a serious concern observed on ${date} regarding unsanitary practices. Specifically, it was noted that ${practice}.
+
+Adherence to sanitary guidelines is critical, especially in a food service environment, to ensure the safety of our customers and compliance with health regulations.
+
+Please take immediate corrective action to comply with all sanitary procedures. Failure to do so may result in further disciplinary action.
+
+Sincerely,
+[Your Name]
+Manager`;
+    } else {
+        return 'Invalid tone selected. Please choose either Casual or Formal.';
+    }
+}
+
+function generateTemplate17() {
+    const tone = document.getElementById('tone-select17').value;
+    const name = document.getElementById('employee-name17').value.trim();
+    const date = document.getElementById('date17').value;
+    const policy = document.getElementById('policy17').value.trim();
+
+    if (!tone || !name || !date || !policy) {
+        alert('Please fill in all fields.');
+        return '';
+    }
+
+    if (tone === 'casual') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Reminder About Company Policy
+
+Hey ${name},
+
+I wanted to touch base regarding our ${policy}. On ${date}, it seems there was an instance where this policy wasn't followed.
+
+It's important that we all adhere to company policies to keep everything running smoothly. Please make sure to review the policy and let me know if you have any questions.
+
+Thanks for understanding!
+
+Best,
+[Your Name]
+Manager`;
+    } else if (tone === 'formal') {
+        return `Dairy Queen Courtenay
+
+Date: ${new Date().toLocaleDateString('en-US')}
+
+To: ${name}
+
+Subject: Failure to Follow Company Policy
+
+Dear ${name},
+
+I am writing to address a concern regarding your failure to adhere to the ${policy} on ${date}.
+
+Compliance with all company policies is mandatory to maintain a professional and efficient workplace. Please review the policy in question and ensure full compliance moving forward.
+
+Continued disregard for company policies may result in further disciplinary action.
+
+Sincerely,
+[Your Name]
+Manager`;
+    } else {
+        return 'Invalid tone selected. Please choose either Casual or Formal.';
+    }
+}
+
+
+
+        // Download Write Up as Text File
+        function downloadWriteUp() {
+            const content = document.getElementById('writeUpContent').innerText;
+            const blob = new Blob([content], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'WriteUp.txt';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        // Copy Write Up to Clipboard
+        function copyWriteUp() {
+            const content = document.getElementById('writeUpContent').innerText;
+            navigator.clipboard.writeText(content).then(() => {
+                alert('Write Up copied to clipboard!');
+            }).catch(err => {
+                alert('Failed to copy Write Up.');
+                console.error('Error copying text: ', err);
+            });
+        }
+    </script>
+</body>
+
+</html>
