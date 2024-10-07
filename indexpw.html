@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>DQ Courtenay Dashboard</title>
-    <link rel="icon" href="logo.svg" type="image/svg+xml">
+<link rel="icon" href="logo.svg" type="image/svg+xml">
+
 
     <!-- Fonts and Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,7 +24,7 @@
         }
 
         #wrapper {
-            /* Changed from 'display: none;' to 'display: flex;' */
+            display: none;
             min-height: 100vh;
             display: flex;
         }
@@ -42,7 +43,41 @@
             }
         }
 
-        /* Removed Password Interface Styles */
+        /* Password Interface Styles */
+        #password-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fc;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+
+        #password-container input[type="password"] {
+            padding: 0.5rem;
+            font-size: 1rem;
+            margin-right: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 0.25rem;
+        }
+
+        #password-container button {
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            border: none;
+            background-color: #4e73df;
+            color: #fff;
+            border-radius: 0.25rem;
+        }
+
+        #password-container button:hover {
+            background-color: #2e59d9;
+        }
 
         /* Sidebar Styles */
         .sidebar {
@@ -170,15 +205,19 @@
 </head>
 
 <body>
-    <!-- Removed Password Container -->
+    <!-- Password Container -->
+    <div id="password-container">
+        <input type="password" id="password-input" placeholder="Enter Password">
+        <button id="password-submit">Submit</button>
+    </div>
 
     <!-- Page Wrapper -->
-    <div id="wrapper" class="fade-in">
+    <div id="wrapper">
         <!-- Sidebar -->
         <nav class="sidebar d-flex flex-column">
             <a href="#" class="sidebar-brand">
-                <img src="dq_logo.png" alt="Icon" class="me-2" style="width: 32px; height: 24px;">
-                Courtenay
+               <img src="dq_logo.png" alt="Icon" class="me-2" style="width: 32px; height: 24px;">
+ Courtenay
             </a>
             <ul class="nav flex-column mt-4">
                 <li class="nav-item">
@@ -232,7 +271,7 @@
             </nav>
             <!-- End of Topbar -->
 
-           <!-- Main Content -->
+            <!-- Main Content -->
             <div class="container-fluid">
                 <div class="row g-4">
                     <!-- Employee Management Card -->
@@ -353,6 +392,7 @@
                 </div>
             </div>
             <!-- End of Main Content -->
+
             <!-- Footer -->
             <div class="footer">
                 &copy; 2024 Dairy Queen Courtenay Managers Dashboard. All rights reserved.
@@ -366,255 +406,315 @@
     <!-- JavaScript Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom Scripts -->
+    <!-- Existing Custom Scripts Encapsulated in initDashboard -->
     <script>
-        // === Open Folder Function (Requires Backend Support) ===
-        function openFolder(path) {
-            if (window.pywebview && window.pywebview.api) {
-                window.pywebview.api.open_folder(path);
+        function initDashboard() {
+            // === Open Folder Function (Requires Backend Support) ===
+            function openFolder(path) {
+                if (window.pywebview && window.pywebview.api) {
+                    window.pywebview.api.open_folder(path);
+                } else {
+                    alert('Folder access is not supported in this environment.');
+                }
+            }
+
+            // === Open Window Function ===
+            function openWindow(url) {
+                const width = 1100;
+                const height = 800;
+                const left = (screen.width - width) / 2;
+                const top = (screen.height - height) / 2;
+
+                window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
+            }
+
+            // === Update Date and Time ===
+            function updateDateTime() {
+                const now = new Date();
+                const options = {
+                    weekday: 'long',
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit'
+                };
+                const formattedDateTime = now.toLocaleString('en-US', options);
+                document.getElementById('datetime').innerText = formattedDateTime;
+            }
+            setInterval(updateDateTime, 1000);
+            updateDateTime(); // Initialize immediately
+
+            // === Slideshow Functionality ===
+            const slideshow = document.getElementById('slideshow');
+            const images = slideshow.querySelectorAll('img');
+            let currentIndex = 0;
+            const totalImages = images.length;
+            let slideshowInterval;
+            const intervalTime = 5000; // 5 seconds
+
+            // Initialize slideshow by ensuring only the first image has the 'active' class
+            function initializeSlideshowStyles() {
+                slideshow.style.position = 'relative';
+                slideshow.style.overflow = 'hidden';
+                images.forEach((img, index) => {
+                    img.classList.remove('active'); // Remove 'active' class from all images
+                });
+                if (images.length > 0) {
+                    images[0].classList.add('active'); // Add 'active' class to the first image
+                }
+            }
+
+            // Show the next image by toggling the 'active' class
+            function showNextImage() {
+                images[currentIndex].classList.remove('active'); // Hide current image
+                currentIndex = (currentIndex + 1) % totalImages; // Move to next image index
+                images[currentIndex].classList.add('active'); // Show next image
+            }
+
+            // Start the slideshow interval
+            function startSlideshow() {
+                slideshowInterval = setInterval(showNextImage, intervalTime);
+            }
+
+            // Stop the slideshow interval
+            function stopSlideshow() {
+                clearInterval(slideshowInterval);
+            }
+
+            // Initialize the slideshow
+            initializeSlideshowStyles();
+            startSlideshow();
+
+            // Pause slideshow on hover
+            slideshow.addEventListener('mouseenter', stopSlideshow);
+            slideshow.addEventListener('mouseleave', startSlideshow);
+
+            // === Reminders Functionality ===
+            const reminders = [
+                // Examples of reminders
+                {
+                    type: 'weekly',
+                    daysOfWeek: [1, 5],
+                    title: 'Garbage Pickup Day',
+                    description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+                },
+                {
+                    type: 'weekly',
+                    daysOfWeek: [2],
+                    title: 'Recycling Pickup Day',
+                    description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+                },
+                {
+                    type: 'monthly',
+                    dayOfMonth: 1,
+                    title: 'Inventory',
+                    description: ' '
+                },
+                {
+                    type: 'specificDate',
+                    date: '2024-10-28',
+                    title: 'New Items Launching',
+                    description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
+                },
+                {
+                    type: 'specificDate',
+                    date: '2024-11-25',
+                    title: 'New Blizzard',
+                    description: 'Peppermint hot cocoa'
+                },
+            ];
+
+            // Function to check if a reminder is upcoming
+            function isReminderUpcoming(reminder, today, daysAhead) {
+                const upcomingDate = new Date(today);
+                upcomingDate.setDate(today.getDate() + daysAhead);
+
+                switch (reminder.type) {
+                    case 'specificDate':
+                        let reminderDate = new Date(reminder.date);
+                        reminderDate.setHours(0, 0, 0, 0);
+                        return reminderDate >= today && reminderDate <= upcomingDate;
+                    case 'weekly':
+                        for (let i = 0; i <= daysAhead; i++) {
+                            let date = new Date(today);
+                            date.setDate(today.getDate() + i);
+                            let dayOfWeek = date.getDay(); // 0=Sunday
+                            if (reminder.daysOfWeek.includes(dayOfWeek)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    case 'monthly':
+                        for (let i = 0; i <= daysAhead; i++) {
+                            let date = new Date(today);
+                            date.setDate(today.getDate() + i);
+                            if (date.getDate() === reminder.dayOfMonth) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    case 'nthDayOfMonth':
+                        for (let i = 0; i <= daysAhead; i++) {
+                            let date = new Date(today);
+                            date.setDate(today.getDate() + i);
+                            if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    default:
+                        return false;
+                }
+            }
+
+            // Function to check if a date is the nth occurrence of a day of week in the month
+            function isNthDayOfMonth(date, nth, dayOfWeek) {
+                if (date.getDay() !== dayOfWeek) return false;
+                let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+                let dayCount = 0;
+                for (let d = 1; d <= date.getDate(); d++) {
+                    let currentDate = new Date(date.getFullYear(), date.getMonth(), d);
+                    if (currentDate.getDay() === dayOfWeek) {
+                        dayCount++;
+                        if (currentDate.getDate() === date.getDate() && dayCount === nth) {
+                            return true;
+                        }
+                    }
+                }
+                return false;
+            }
+
+            // Function to display upcoming reminders
+            function displayReminders() {
+                const today = new Date();
+                today.setHours(0, 0, 0, 0);
+                const daysAhead = 7; // Show reminders for the next 7 days
+                const reminderList = document.getElementById('reminderList');
+                reminderList.innerHTML = '';
+
+                reminders.forEach(function (reminder) {
+                    if (isReminderUpcoming(reminder, today, daysAhead)) {
+                        let li = document.createElement('li');
+                        let reminderDate = getReminderDate(reminder, today);
+                        let dateString = reminderDate ? reminderDate.toLocaleDateString() : '';
+                        li.innerHTML = '<strong>' + reminder.title + '</strong> (' + dateString + '): ' + reminder.description;
+                        reminderList.appendChild(li);
+                    }
+                });
+            }
+
+            // Function to get the date of the upcoming reminder
+            function getReminderDate(reminder, today) {
+                switch (reminder.type) {
+                    case 'specificDate':
+                        return new Date(reminder.date);
+                    case 'weekly':
+                        for (let i = 0; i <= 7; i++) {
+                            let date = new Date(today);
+                            date.setDate(today.getDate() + i);
+                            if (reminder.daysOfWeek.includes(date.getDay())) {
+                                return date;
+                            }
+                        }
+                        return null;
+                    case 'monthly':
+                        let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
+                        if (date < today) {
+                            date.setMonth(date.getMonth() + 1);
+                        }
+                        return date;
+                    case 'nthDayOfMonth':
+                        let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
+                        if (nthDate < today) {
+                            nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
+                        }
+                        return nthDate;
+                    default:
+                        return null;
+                }
+            }
+
+            // Function to get the date of the nth occurrence of a day of week in a month
+            function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
+                let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+                let count = 0;
+                while (date.getMonth() === startDate.getMonth()) {
+                    if (date.getDay() === dayOfWeek) {
+                        count++;
+                        if (count === nth) {
+                            return new Date(date); // Return a copy of the date
+                        }
+                    }
+                    date.setDate(date.getDate() + 1);
+                }
+                return null;
+            }
+
+            // Run displayReminders on initialization
+            displayReminders();
+        }
+    </script>
+
+    <!-- Password Handling Script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const passwordContainer = document.getElementById('password-container');
+            const wrapper = document.getElementById('wrapper');
+            const passwordInput = document.getElementById('password-input');
+            const passwordSubmit = document.getElementById('password-submit');
+
+            const correctPassword = 'dq1'; // **Replace with your actual password**
+
+            // Function to get URL parameters
+            function getUrlParameter(name) {
+                name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+                const regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+                const results = regex.exec(location.search);
+                return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+            }
+
+            const bypass = getUrlParameter('bypass');
+
+            if (bypass === 'true') {
+                // Bypass password
+                passwordContainer.style.display = 'none';
+                wrapper.classList.add('fade-in');
+                initDashboard();
             } else {
-                alert('Folder access is not supported in this environment.');
+                // Regular password handling
+                passwordSubmit.addEventListener('click', function () {
+                    const enteredPassword = passwordInput.value.trim();
+                    if (enteredPassword === correctPassword) {
+                        // Hide the password container
+                        passwordContainer.style.display = 'none';
+                        // Reveal the main content with fade-in effect
+                        wrapper.classList.add('fade-in');
+                        // Initialize the dashboard scripts
+                        initDashboard();
+                    } else {
+                        alert('Incorrect password. Please try again.');
+                        passwordInput.value = '';
+                        passwordInput.focus();
+                    }
+                });
+
+                // Allow pressing Enter to submit the password
+                passwordInput.addEventListener('keyup', function (event) {
+                    if (event.key === 'Enter') {
+                        passwordSubmit.click();
+                    }
+                });
+
+                // Optional: Focus on the password input when the page loads
+                passwordInput.focus();
             }
-        }
+        });
+    </script>
 
-        // === Open Window Function ===
-        function openWindow(url) {
-            const width = 1100;
-            const height = 800;
-            const left = (screen.width - width) / 2;
-            const top = (screen.height - height) / 2;
-
-            window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
-        }
-
-        // === Update Date and Time ===
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            };
-            const formattedDateTime = now.toLocaleString('en-US', options);
-            document.getElementById('datetime').innerText = formattedDateTime;
-        }
-        setInterval(updateDateTime, 1000);
-        updateDateTime(); // Initialize immediately
-
-        // === Slideshow Functionality ===
-        const slideshow = document.getElementById('slideshow');
-        const images = slideshow.querySelectorAll('img');
-        let currentIndex = 0;
-        const totalImages = images.length;
-        let slideshowInterval;
-        const intervalTime = 5000; // 5 seconds
-
-        // Initialize slideshow by ensuring only the first image has the 'active' class
-        function initializeSlideshowStyles() {
-            slideshow.style.position = 'relative';
-            slideshow.style.overflow = 'hidden';
-            images.forEach((img, index) => {
-                img.classList.remove('active'); // Remove 'active' class from all images
-            });
-            if (images.length > 0) {
-                images[0].classList.add('active'); // Add 'active' class to the first image
-            }
-        }
-
-        // Show the next image by toggling the 'active' class
-        function showNextImage() {
-            images[currentIndex].classList.remove('active'); // Hide current image
-            currentIndex = (currentIndex + 1) % totalImages; // Move to next image index
-            images[currentIndex].classList.add('active'); // Show next image
-        }
-
-        // Start the slideshow interval
-        function startSlideshow() {
-            slideshowInterval = setInterval(showNextImage, intervalTime);
-        }
-
-        // Stop the slideshow interval
-        function stopSlideshow() {
-            clearInterval(slideshowInterval);
-        }
-
-        // Initialize the slideshow
-        initializeSlideshowStyles();
-        startSlideshow();
-
-        // Pause slideshow on hover
-        slideshow.addEventListener('mouseenter', stopSlideshow);
-        slideshow.addEventListener('mouseleave', startSlideshow);
-
-        // === Reminders Functionality ===
-        const reminders = [
-            // Examples of reminders
-            {
-                type: 'weekly',
-                daysOfWeek: [1, 5],
-                title: 'Garbage Pickup Day',
-                description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-            },
-            {
-                type: 'weekly',
-                daysOfWeek: [2],
-                title: 'Recycling Pickup Day',
-                description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-            },
-            {
-                type: 'monthly',
-                dayOfMonth: 1,
-                title: 'Inventory',
-                description: ' '
-            },
-            {
-                type: 'specificDate',
-                date: '2024-10-28',
-                title: 'New Items Launching',
-                description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
-            },
-            {
-                type: 'specificDate',
-                date: '2024-11-25',
-                title: 'New Blizzard',
-                description: 'Peppermint hot cocoa'
-            },
-        ];
-
-        // Function to check if a reminder is upcoming
-        function isReminderUpcoming(reminder, today, daysAhead) {
-            const upcomingDate = new Date(today);
-            upcomingDate.setDate(today.getDate() + daysAhead);
-
-            switch (reminder.type) {
-                case 'specificDate':
-                    let reminderDate = new Date(reminder.date);
-                    reminderDate.setHours(0, 0, 0, 0);
-                    return reminderDate >= today && reminderDate <= upcomingDate;
-                case 'weekly':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        let dayOfWeek = date.getDay(); // 0=Sunday
-                        if (reminder.daysOfWeek.includes(dayOfWeek)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                case 'monthly':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (date.getDate() === reminder.dayOfMonth) {
-                            return true;
-                        }
-                    }
-                    return false;
-                case 'nthDayOfMonth':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
-        // Function to check if a date is the nth occurrence of a day of week in the month
-        function isNthDayOfMonth(date, nth, dayOfWeek) {
-            if (date.getDay() !== dayOfWeek) return false;
-            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            let dayCount = 0;
-            for (let d = 1; d <= date.getDate(); d++) {
-                let currentDate = new Date(date.getFullYear(), date.getMonth(), d);
-                if (currentDate.getDay() === dayOfWeek) {
-                    dayCount++;
-                    if (currentDate.getDate() === date.getDate() && dayCount === nth) {
-                        return true;
-                    }
-                }
-            }
-            return false;
-        }
-
-        // Function to display upcoming reminders
-        function displayReminders() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const daysAhead = 7; // Show reminders for the next 7 days
-            const reminderList = document.getElementById('reminderList');
-            reminderList.innerHTML = '';
-
-            reminders.forEach(function (reminder) {
-                if (isReminderUpcoming(reminder, today, daysAhead)) {
-                    let li = document.createElement('li');
-                    let reminderDate = getReminderDate(reminder, today);
-                    let dateString = reminderDate ? reminderDate.toLocaleDateString() : '';
-                    li.innerHTML = '<strong>' + reminder.title + '</strong> (' + dateString + '): ' + reminder.description;
-                    reminderList.appendChild(li);
-                }
-            });
-        }
-
-        // Function to get the date of the upcoming reminder
-        function getReminderDate(reminder, today) {
-            switch (reminder.type) {
-                case 'specificDate':
-                    return new Date(reminder.date);
-                case 'weekly':
-                    for (let i = 0; i <= 7; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (reminder.daysOfWeek.includes(date.getDay())) {
-                            return date;
-                        }
-                    }
-                    return null;
-                case 'monthly':
-                    let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
-                    if (date < today) {
-                        date.setMonth(date.getMonth() + 1);
-                    }
-                    return date;
-                case 'nthDayOfMonth':
-                    let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
-                    if (nthDate < today) {
-                        nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
-                    }
-                    return nthDate;
-                default:
-                    return null;
-            }
-        }
-
-        // Function to get the date of the nth occurrence of a day of week in a month
-        function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
-            let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-            let count = 0;
-            while (date.getMonth() === startDate.getMonth()) {
-                if (date.getDay() === dayOfWeek) {
-                    count++;
-                    if (count === nth) {
-                        return new Date(date); // Return a copy of the date
-                    }
-                }
-                date.setDate(date.getDate() + 1);
-            }
-            return null;
-        }
-
-        // Run displayReminders on initialization
-        displayReminders();
-
-        // === Sidebar Toggle Script (Optional for Mobile) ===
+    <!-- Sidebar Toggle Script (Optional for Mobile) -->
+    <script>
         document.getElementById('sidebarToggle').addEventListener('click', function () {
             const sidebar = document.querySelector('.sidebar');
             sidebar.classList.toggle('active');
