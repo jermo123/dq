@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee Timecard Report</title>
+    <style>
+        /* Basic styling */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        #report-table {
+            border-collapse: collapse;
+            width: 100%;
+            font-size: 12px; /* Smaller font for condensing */
+        }
+        #report-table th, #report-table td {
+            border: 1px solid #ddd;
+            padding: 4px; /* Reduced padding */
+        }
+        #report-table th {
+            background-color: #f2f2f2;
+            text-align: left;
+        }
+        #controls {
+            margin-bottom: 20px;
+        }
+        @media print {
+            #controls {
+                display: none;
+            }
+            #print-button {
+                display: none;
+            }
+        }
+        #print-button {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Employee Timecard Report</h1>
+    <div id="controls">
+        <label for="csv-file">Upload CSV File:</label><br>
+        <input type="file" id="csv-file" accept=".csv"><br><br>
+    </div>
+    <button id="print-button">Print Report</button>
+    <div id="report">
+        <!-- Report table will be inserted here -->
+    </div>
+
+    <script>
+        document.getElementById('csv-file').addEventListener('change', function() {
+            let fileInput = document.getElementById('csv-file');
+            if (fileInput.files.length === 0) {
+                alert('Please select a CSV file.');
+                return;
+            }
+            let file = fileInput.files[0];
+            let reader = new FileReader();
+            reader.onload = function(e) {
+                let csvData = e.target.result;
+                // Parse the CSV data and generate the report
+                generateReport(csvData);
+            };
+            reader.readAsText(file);
+        });
+
+        document.getElementById('print-button').addEventListener('click', function() {
+            window.print();
+        });
+
+        function generateReport(csvData) {
+            let lines = csvData.split('\n');
+
+            let employees = {}; // Object to hold employee data
+            let state = 'searching'; // 'searching' or 'readingEmployee'
+
+            let currentEmployee = null;
+
+            let minDate = null;
+            let maxDate = null;
+
+            for (let i = 0; i < lines.length; i++) {
+                let line = lines[i].trim();
+                if (line.startsWith('Employe Name')) {
+                    state = 'newEmployee';
+                    currentEmployee = {};
+                } else if (state === 'newEmployee') {
+                    // Next line contains employee name
+                    let columns = parseCSVLine(line);
+                    if (columns.length > 0) {
+                        // Employee name might be in columns[1] due to leading comma
+                        let name = columns[1] || columns[0];
+                        currentEmployee.name = name.replace(/^"+|"+$/g, '');
+                        currentEmployee.records = [];
+                        employees[currentEmployee.name] = currentEmployee;
+                        state = 'readingEmployee';
+                    }
+                } else if (state === 'readingEmployee') {
+                    if (line.startsWith('Totals:')) {
+                        state = 'searching';
+                        currentEmployee = null;
+                    } else if (line.startsWith('Date') || line.startsWith('Date,,Job')) {
+                        // Header line that may contain field indices
+                        // Let's find the index for 'Job' field
+                        let headers = parseCSVLine(line);
+                        currentEmployee.fieldIndices = {
+                            Date: headers.indexOf('Date'),
+                            Job: headers.indexOf('Job'),
+                            TimeIn: headers.indexOf('Time In'),
+                            TimeOut: headers.indexOf('Time Out'),
+                            RegularHours: headers.indexOf('Regular'),
+                            OTHours: headers.indexOf('OT'),
+                            TotalHours: headers.indexOf('Total Hrs'),
+                        };
+                        continue;
+                    } else if (line.length > 0) {
+                        let columns = parseCSVLine(line);
+                        // Check if columns[0] is a date
+                        let dateStr = columns[currentEmployee.fieldIndices.Date];
+                        if (isValidDateStr(dateStr)) {
+                            let recordDate = parseDate(dateStr);
+                            // Update min and max dates
+                            if (minDate === null || recordDate < minDate) {
+                                minDate = recordDate;
+                            }
+                            if (maxDate === null || recordDate > maxDate) {
+                                maxDate = recordDate;
+                            }
+                            let record = {
+                                date: recordDate,
+                                dateStr: recordDate.toLocaleDateString(),
+                                position: columns[currentEmployee.fieldIndices.Job],
+                                timeIn: columns[currentEmployee.fieldIndices.TimeIn],
+                                timeOut: columns[currentEmployee.fieldIndices.TimeOut],
+                                regularHours: parseFloat(columns[currentEmployee.fieldIndices.RegularHours]) || 0,
+                                otHours: parseFloat(columns[currentEmployee.fieldIndices.OTHours]) || 0,
+                                totalHours: parseFloat(columns[currentEmployee.fieldIndices.TotalHours]) || 0
+                            };
+                            currentEmployee.records.push(record);
+                        }
+                    }
+                }
+            }
+
+            // Prepare report data
+            let reportData = [];
+            for (let empName in employees) {
+                let emp = employees[empName];
+                let totalHours = 0;
+                for (let rec of emp.records) {
+                    totalHours += rec.totalHours;
+                }
+                emp.totalHours = totalHours.toFixed(2);
+                reportData.push(emp);
+            }
+
+            // Display the report
+            displayReport(reportData, minDate, maxDate);
+        }
+
+        function parseCSVLine(text) {
+            let result = [];
+            let current = '';
+            let inQuotes = false;
+            for (let i = 0; i < text.length; i++) {
+                let char = text[i];
+                if (char === '"') {
+                    if (i < text.length - 1 && text[i + 1] === '"') {
+                        current += '"';
+                        i++; // Skip the escaped quote
+                    } else {
+                        inQuotes = !inQuotes;
+                    }
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current);
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            result.push(current);
+            // Trim whitespace and remove leading/trailing quotes
+            for (let i = 0; i < result.length; i++) {
+                result[i] = result[i].trim().replace(/^"+|"+$/g, '');
+            }
+            return result;
+        }
+
+        function isValidDateStr(str) {
+            // Matches dates like MM/DD/YY, MM/DD/YYYY, MM/DD/YYYY HH:MM AM/PM
+            return /^\d{2}\/\d{2}\/\d{2,4}( \d{1,2}:\d{2} [AP]M)?$/.test(str);
+        }
+
+        function parseDate(str) {
+            // Parses dates like MM/DD/YY or MM/DD/YYYY HH:MM AM/PM
+            let dateTimeParts = str.split(' ');
+            let datePart = dateTimeParts[0];
+            let timePart = dateTimeParts[1] ? dateTimeParts[1] + ' ' + dateTimeParts[2] : null;
+
+            let dateParts = datePart.split('/');
+            let month = parseInt(dateParts[0]) - 1; // Month is zero-based
+            let day = parseInt(dateParts[1]);
+            let year = parseInt(dateParts[2]);
+            if (year < 100) {
+                year += 2000; // Assuming 21st century
+            }
+
+            let date = new Date(year, month, day);
+
+            if (timePart) {
+                let time = parseTime(timePart);
+                date.setHours(time.hours, time.minutes, 0, 0);
+            }
+            return date;
+        }
+
+        function parseTime(timeStr) {
+            // Parses time in format HH:MM AM/PM
+            let parts = timeStr.split(' ');
+            let timeParts = parts[0].split(':');
+            let hours = parseInt(timeParts[0]);
+            let minutes = parseInt(timeParts[1]);
+            let ampm = parts[1];
+            if (ampm === 'PM' && hours < 12) {
+                hours += 12;
+            } else if (ampm === 'AM' && hours === 12) {
+                hours = 0;
+            }
+            return { hours: hours, minutes: minutes };
+        }
+
+        function displayReport(reportData, minDate, maxDate) {
+            let reportDiv = document.getElementById('report');
+            reportDiv.innerHTML = ''; // Clear previous report
+
+            // Display date range
+            let dateRangeHeader = document.createElement('h2');
+            let options = { year: 'numeric', month: 'long', day: 'numeric' };
+            dateRangeHeader.innerText = `Report Date Range: ${minDate.toLocaleDateString(undefined, options)} - ${maxDate.toLocaleDateString(undefined, options)}`;
+            reportDiv.appendChild(dateRangeHeader);
+
+            let table = document.createElement('table');
+            table.id = 'report-table';
+
+            // Create table header
+            let thead = document.createElement('thead');
+            let headerRow = document.createElement('tr');
+            let headers = ['Employee Name', 'Date', 'Position', 'Hours Worked'];
+            for (let headerText of headers) {
+                let th = document.createElement('th');
+                th.innerText = headerText;
+                headerRow.appendChild(th);
+            }
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+
+            // Create table body
+            let tbody = document.createElement('tbody');
+            for (let emp of reportData) {
+                // Employee name row
+                let nameRow = document.createElement('tr');
+                let nameCell = document.createElement('td');
+                nameCell.innerText = emp.name;
+                nameCell.style.fontWeight = 'bold';
+                nameCell.colSpan = 4;
+                nameRow.appendChild(nameCell);
+                tbody.appendChild(nameRow);
+
+                // Shift records
+                for (let rec of emp.records) {
+                    let row = document.createElement('tr');
+                    let nameCell = document.createElement('td');
+                    nameCell.innerText = ''; // Empty cell for alignment
+                    let dateCell = document.createElement('td');
+                    dateCell.innerText = rec.dateStr;
+                    let positionCell = document.createElement('td');
+                    positionCell.innerText = rec.position;
+                    positionCell.style.fontStyle = 'italic';
+                    let hoursCell = document.createElement('td');
+                    hoursCell.innerText = rec.totalHours.toFixed(2);
+                    row.appendChild(nameCell);
+                    row.appendChild(dateCell);
+                    row.appendChild(positionCell);
+                    row.appendChild(hoursCell);
+                    tbody.appendChild(row);
+                }
+                // Total hours row
+                let totalRow = document.createElement('tr');
+                let labelCell = document.createElement('td');
+                labelCell.innerText = ''; // Empty cell for alignment
+                let totalLabelCell = document.createElement('td');
+                totalLabelCell.innerText = 'Total Hours';
+                totalLabelCell.style.fontWeight = 'bold';
+                totalLabelCell.colSpan = 2;
+                let totalHoursCell = document.createElement('td');
+                totalHoursCell.innerText = emp.totalHours;
+                totalHoursCell.style.fontWeight = 'bold';
+                totalRow.appendChild(labelCell);
+                totalRow.appendChild(totalLabelCell);
+                totalRow.appendChild(totalHoursCell);
+                tbody.appendChild(totalRow);
+            }
+            table.appendChild(tbody);
+
+            reportDiv.appendChild(table);
+        }
+    </script>
+</body>
+</html>
