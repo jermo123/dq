@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -11,212 +11,344 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
 
     <!-- CSS Libraries -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Updated Bootstrap to the latest version -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom Styles -->
-    <style>
-        body {
-            font-family: 'Nunito', sans-serif;
-            background-color: #f8f9fc;
-            margin: 0;
-            padding: 0;
-        }
+<style>
+    /* Define CSS variables for themes */
+    :root {
+        --primary-color: #4e73df;
+        --secondary-color: #2e59d9;
+        --background-color: #f8f9fc;
+        --text-color: #000;
+        --sidebar-bg-color: var(--primary-color);
+        --sidebar-text-color: #fff;
+        --topbar-bg-color: #fff;
+        --topbar-text-color: #000;
+        --card-bg-color: #fff;
+        --card-text-color: #000;
+        --link-color: #4e73df;
+        --link-hover-color: #2e59d9;
+    }
 
+    [data-theme="dark"] {
+        --primary-color: #1a1a2e;
+        --secondary-color: #16213e;
+        --background-color: #121212;
+        --text-color: #e0e0e0;
+        --sidebar-bg-color: #1a1a2e;
+        --sidebar-text-color: #e0e0e0;
+        --topbar-bg-color: #1a1a2e;
+        --topbar-text-color: #e0e0e0;
+        --card-bg-color: #2c2c3e;
+        --card-text-color: #e0e0e0;
+        --link-color: #82aaff;
+        --link-hover-color: #a3c1ff;
+    }
+
+    body {
+        font-family: 'Nunito', sans-serif;
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    #wrapper {
+        min-height: 100vh;
+        display: flex;
+    }
+
+    /* Sidebar Styles */
+    .sidebar {
+        width: 250px;
+        background-color: var(--sidebar-bg-color);
+        color: var(--sidebar-text-color);
+        flex-shrink: 0;
+        transition: all 0.3s;
+        height: 100vh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        overflow-y: auto;
+    }
+
+    .sidebar .sidebar-brand {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+        background-color: var(--secondary-color);
+        font-size: 1.25rem;
+        font-weight: 700;
+        text-decoration: none;
+        color: var(--sidebar-text-color);
+    }
+
+    .sidebar .nav-link {
+        color: var(--sidebar-text-color);
+        padding: 0.75rem 1.25rem;
+        display: flex;
+        align-items: center;
+        transition: background 0.3s, color 0.3s;
+        text-decoration: none;
+    }
+
+    .sidebar .nav-link:hover {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: var(--link-hover-color);
+        text-decoration: none;
+    }
+
+    .sidebar .nav-link i {
+        margin-right: 0.75rem;
+    }
+
+    /* Collapsed Sidebar */
+    .sidebar.collapsed {
+        width: 70px;
+    }
+
+    .sidebar.collapsed .nav-link span {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-brand span {
+        display: none;
+    }
+
+    .sidebar.collapsed .sidebar-brand img {
+        margin-right: 0;
+    }
+
+    /* Content Styles */
+    #content-wrapper {
+        margin-left: 250px;
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        transition: margin-left 0.3s;
+    }
+
+    .sidebar.collapsed + #content-wrapper {
+        margin-left: 70px;
+    }
+
+    /* Topbar Styles */
+    .topbar {
+        background-color: var(--topbar-bg-color);
+        color: var(--topbar-text-color);
+        padding: 0.5rem 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+    .topbar .toggle-button {
+        cursor: pointer;
+        font-size: 1.5rem;
+        color: var(--topbar-text-color);
+    }
+
+    /* Main Content */
+    .container-fluid {
+        padding: 2rem;
+        flex: 1;
+        overflow-y: auto;
+    }
+
+    /* Links */
+    a {
+        color: var(--link-color);
+        transition: color 0.3s ease;
+    }
+
+    a:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+    }
+
+    /* Cards */
+    .card {
+        background-color: var(--card-bg-color);
+        color: var(--card-text-color);
+        border: none;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        transition: transform 0.3s ease, background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-header {
+        background-color: transparent;
+        border-bottom: none;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+
+    .card-body a {
+        color: var(--link-color);
+    }
+
+    .card-body a:hover {
+        color: var(--link-hover-color);
+        text-decoration: underline;
+    }
+
+    /* Footer Styles */
+    .footer {
+        background-color: var(--topbar-bg-color);
+        color: var(--topbar-text-color);
+        text-align: center;
+        padding: 1rem;
+        font-size: 0.9rem;
+    }
+
+    /* Responsive Styles */
+    @media (max-width: 768px) {
         #wrapper {
-            /* Changed from 'display: none;' to 'display: flex;' */
-            min-height: 100vh;
-            display: flex;
-        }
-
-        #wrapper.fade-in {
-            animation: fadeIn 1s ease-in-out forwards;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        /* Removed Password Interface Styles */
-
-        /* Sidebar Styles */
-        .sidebar {
-            width: 250px;
-            background-color: #4e73df;
-            color: #fff;
-            flex-shrink: 0;
-            transition: all 0.3s;
-            height: 100vh;
-            position: fixed;
-            top: 0;
-            left: 0;
-            overflow-y: auto;
-        }
-
-        .sidebar .sidebar-brand {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem;
-            background-color: #2e59d9;
-            font-size: 1.25rem;
-            font-weight: 700;
-            text-decoration: none;
-            color: #fff;
-        }
-
-        .sidebar .nav-link {
-            color: #fff;
-            padding: 0.75rem 1.25rem;
-            display: flex;
-            align-items: center;
-            transition: background 0.3s;
-            text-decoration: none;
-        }
-
-        .sidebar .nav-link:hover {
-            background-color: #1d2c8a;
-            text-decoration: none;
-        }
-
-        .sidebar .nav-link i {
-            margin-right: 0.75rem;
-        }
-
-        /* Content Styles */
-        #content-wrapper {
-            margin-left: 250px;
-            flex: 1;
-            display: flex;
             flex-direction: column;
         }
 
-        /* Topbar Styles */
-        .topbar {
-            background-color: #fff;
-            padding: 1rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        /* Main Content */
-        .container-fluid {
-            padding: 2rem;
-            flex: 1;
-            overflow-y: auto;
-        }
-
-        /* Footer Styles */
-        .footer {
-            background-color: #f1f1f1;
-            text-align: center;
-            padding: 1rem;
-            font-size: 0.9rem;
-            color: #6c757d;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 768px) {
-            #wrapper {
-                flex-direction: column;
-            }
-
-            .sidebar {
-                width: 100%;
-                height: auto;
-                position: relative;
-            }
-
-            #content-wrapper {
-                margin-left: 0;
-            }
-        }
-
-        /* Slideshow Styles */
-        #slideshow {
+        .sidebar {
+            width: 100%;
+            height: auto;
             position: relative;
-            width: 100%;
-            max-width: 100%;
-            height: 400px; /* Adjust as needed */
-            overflow: hidden;
         }
 
-        #slideshow img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0;
-            transition: opacity 1s ease-in-out;
+        #content-wrapper {
+            margin-left: 0;
         }
 
-        #slideshow img.active {
-            opacity: 1;
-            z-index: 1;
+        .sidebar.collapsed {
+            width: 100%;
         }
-    </style>
+
+        .sidebar.collapsed + #content-wrapper {
+            margin-left: 0;
+        }
+    }
+
+    /* Slideshow Styles */
+    #slideshow {
+        position: relative;
+        width: 100%;
+        max-width: 100%;
+        height: 400px;
+        overflow: hidden;
+        border-radius: 10px;
+    }
+
+    #slideshow img {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+        border-radius: 10px;
+    }
+
+    #slideshow img.active {
+        opacity: 1;
+        z-index: 1;
+    }
+
+    /* Button Styles */
+    .btn-outline-secondary {
+        color: var(--topbar-text-color);
+        border-color: var(--topbar-text-color);
+        transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    }
+
+    .btn-outline-secondary:hover {
+        background-color: var(--topbar-text-color);
+        color: var(--topbar-bg-color);
+        border-color: var(--topbar-text-color);
+    }
+
+    /* Additional Enhancements */
+    /* Scrollbar Styles for Dark Mode */
+    [data-theme="dark"] ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    [data-theme="dark"] ::-webkit-scrollbar-track {
+        background: #1a1a2e;
+    }
+
+    [data-theme="dark"] ::-webkit-scrollbar-thumb {
+        background-color: #3a3a5a;
+        border-radius: 4px;
+        border: 2px solid #1a1a2e;
+    }
+
+    /* Transition for theme changes */
+    * {
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+</style>
 </head>
 
 <body>
-    <!-- Removed Password Container -->
-
     <!-- Page Wrapper -->
-    <div id="wrapper" class="fade-in">
+    <div id="wrapper">
         <!-- Sidebar -->
-        <nav class="sidebar d-flex flex-column">
+        <nav class="sidebar">
             <a href="#" class="sidebar-brand">
                 <img src="dq_logo.png" alt="Icon" class="me-2" style="width: 32px; height: 24px;">
-                Courtenay
+                <span>Courtenay</span>
             </a>
             <ul class="nav flex-column mt-4">
                 <li class="nav-item">
                     <a class="nav-link" href="index.html?bypass=true">
-                        <i class="fas fa-tachometer-alt"></i> Dashboard
+                        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
                     </a>
                 </li>
                 <!-- Employee Management -->
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);" onclick="openWindow('https://script.google.com/macros/s/AKfycbyBJPhHge6kVOjpiOCCtuTfyRRR7dbmaeAuTPurjUbJkEG2MNPLQCLk3MCFAtBVSLPY/exec')">
-                        <i class="fas fa-address-book"></i> Business Directory
+                        <i class="fas fa-address-book"></i> <span>Business Directory</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="emailtemp.html">
-                        <i class="fas fa-envelope"></i> Email Templates
+                        <i class="fas fa-envelope"></i> <span>Email Templates</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="writetemp.html">
-                        <i class="fas fa-file-alt"></i> Write Up Templates
+                        <i class="fas fa-file-alt"></i> <span>Write Up Templates</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="javascript:void(0);" onclick="openWindow('https://script.google.com/macros/s/AKfycbzy2NIfKJCEeSugpPvbuRzqAf6rZ8K6fheL4PMMB3WA8uQDN6ibbquM7scfTtNwwgGg/exec')">
-                        <i class="fas fa-tools"></i> Troubleshooting Guides
+                        <i class="fas fa-tools"></i> <span>Troubleshooting Guides</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="meeting.html">
-                        <i class="fas fa-comments"></i> Meeting Topics
+                        <i class="fas fa-comments"></i> <span>Meeting Topics</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="shopping.html">
-                        <i class="fas fa-shopping-cart"></i> Shopping List
+                        <i class="fas fa-shopping-cart"></i> <span>Shopping List</span>
                     </a>
                 </li>
+                <!-- Add other nav items here -->
             </ul>
         </nav>
         <!-- End of Sidebar -->
@@ -225,10 +357,15 @@
         <div id="content-wrapper">
             <!-- Topbar -->
             <nav class="topbar">
-                <div id="datetime" class="fw-bold"></div>
-                <button class="btn btn-primary d-md-none" id="sidebarToggle">
+                <div class="toggle-button" id="sidebarToggle">
                     <i class="fas fa-bars"></i>
-                </button>
+                </div>
+                <div id="datetime" class="fw-bold"></div>
+                <div>
+                    <button class="btn btn-outline-secondary" id="themeToggle">
+                        <i class="fas fa-sun"></i>
+                    </button>
+                </div>
             </nav>
             <!-- End of Topbar -->
 
@@ -353,6 +490,8 @@
                 </div>
             </div>
             <!-- End of Main Content -->
+
+
             <!-- Footer -->
             <div class="footer">
                 &copy; 2024 Dairy Queen Courtenay Managers Dashboard. All rights reserved.
@@ -364,264 +503,314 @@
     <!-- End of Page Wrapper -->
 
     <!-- JavaScript Libraries -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
 
-    <!-- Custom Scripts -->
-    <script>
-        // === Open Folder Function (Requires Backend Support) ===
-        function openFolder(path) {
-            if (window.pywebview && window.pywebview.api) {
-                window.pywebview.api.open_folder(path);
-            } else {
-                alert('Folder access is not supported in this environment.');
-            }
+<!-- Custom Scripts -->
+<script>
+    // === Sidebar Toggle Script ===
+    document.getElementById('sidebarToggle').addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        sidebar.classList.toggle('collapsed'); // Toggles the 'collapsed' class
+    });
+
+    // === Dark Mode Toggle with Persistence ===
+    const themeToggle = document.getElementById('themeToggle');
+    const htmlElement = document.documentElement;
+
+    // Function to update the toggle button icon based on the current theme
+    function updateThemeToggleIcon(theme) {
+        if (theme === 'dark') {
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>'; // Sun icon for dark mode
+        } else {
+            themeToggle.innerHTML = '<i class="fas fa-moon"></i>'; // Moon icon for light mode
         }
+    }
 
-        // === Open Window Function ===
-        function openWindow(url) {
-            const width = 1100;
-            const height = 800;
-            const left = (screen.width - width) / 2;
-            const top = (screen.height - height) / 2;
+    // Initialize theme based on saved preference or default to dark
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+        htmlElement.setAttribute('data-theme', savedTheme);
+        updateThemeToggleIcon(savedTheme);
+    } else {
+        htmlElement.setAttribute('data-theme', 'dark');
+        updateThemeToggleIcon('dark');
+    }
 
-            window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
+    // Event listener for theme toggle button
+    themeToggle.addEventListener('click', function () {
+        const currentTheme = htmlElement.getAttribute('data-theme');
+        if (currentTheme === 'dark') {
+            htmlElement.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+            updateThemeToggleIcon('light');
+        } else {
+            htmlElement.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+            updateThemeToggleIcon('dark');
         }
+    });
 
-        // === Update Date and Time ===
-        function updateDateTime() {
-            const now = new Date();
-            const options = {
-                weekday: 'long',
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            };
-            const formattedDateTime = now.toLocaleString('en-US', options);
-            document.getElementById('datetime').innerText = formattedDateTime;
+    // === Open Folder Function (Requires Backend Support) ===
+    function openFolder(path) {
+        if (window.pywebview && window.pywebview.api) {
+            window.pywebview.api.open_folder(path);
+        } else {
+            alert('Folder access is not supported in this environment.');
         }
-        setInterval(updateDateTime, 1000);
-        updateDateTime(); // Initialize immediately
+    }
 
-        // === Slideshow Functionality ===
-        const slideshow = document.getElementById('slideshow');
-        const images = slideshow.querySelectorAll('img');
-        let currentIndex = 0;
-        const totalImages = images.length;
-        let slideshowInterval;
-        const intervalTime = 5000; // 5 seconds
+    // === Open Window Function ===
+    function openWindow(url) {
+        const width = 1100;
+        const height = 800;
+        const left = (screen.width - width) / 2;
+        const top = (screen.height - height) / 2;
 
-        // Initialize slideshow by ensuring only the first image has the 'active' class
-        function initializeSlideshowStyles() {
-            slideshow.style.position = 'relative';
-            slideshow.style.overflow = 'hidden';
-            images.forEach((img, index) => {
-                img.classList.remove('active'); // Remove 'active' class from all images
-            });
-            if (images.length > 0) {
-                images[0].classList.add('active'); // Add 'active' class to the first image
-            }
+        window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
+    }
+
+    // === Update Date and Time ===
+    function updateDateTime() {
+        const now = new Date();
+        const options = {
+            weekday: 'long',
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit'
+        };
+        const formattedDateTime = now.toLocaleString('en-US', options);
+        document.getElementById('datetime').innerText = formattedDateTime;
+    }
+    setInterval(updateDateTime, 1000);
+    updateDateTime(); // Initialize immediately
+
+    // === Slideshow Functionality ===
+    const slideshow = document.getElementById('slideshow');
+    const images = slideshow.querySelectorAll('img');
+    let currentIndex = 0;
+    const totalImages = images.length;
+    let slideshowInterval;
+    const intervalTime = 5000; // 5 seconds
+
+    // Initialize slideshow by ensuring only the first image has the 'active' class
+    function initializeSlideshowStyles() {
+        slideshow.style.position = 'relative';
+        slideshow.style.overflow = 'hidden';
+        images.forEach((img, index) => {
+            img.classList.remove('active'); // Remove 'active' class from all images
+        });
+        if (images.length > 0) {
+            images[0].classList.add('active'); // Add 'active' class to the first image
         }
+    }
 
-        // Show the next image by toggling the 'active' class
-        function showNextImage() {
-            images[currentIndex].classList.remove('active'); // Hide current image
-            currentIndex = (currentIndex + 1) % totalImages; // Move to next image index
-            images[currentIndex].classList.add('active'); // Show next image
-        }
+    // Show the next image by toggling the 'active' class
+    function showNextImage() {
+        images[currentIndex].classList.remove('active'); // Hide current image
+        currentIndex = (currentIndex + 1) % totalImages; // Move to next image index
+        images[currentIndex].classList.add('active'); // Show next image
+    }
 
-        // Start the slideshow interval
-        function startSlideshow() {
-            slideshowInterval = setInterval(showNextImage, intervalTime);
-        }
+    // Start the slideshow interval
+    function startSlideshow() {
+        slideshowInterval = setInterval(showNextImage, intervalTime);
+    }
 
-        // Stop the slideshow interval
-        function stopSlideshow() {
-            clearInterval(slideshowInterval);
-        }
+    // Stop the slideshow interval
+    function stopSlideshow() {
+        clearInterval(slideshowInterval);
+    }
 
-        // Initialize the slideshow
-        initializeSlideshowStyles();
-        startSlideshow();
+    // Initialize the slideshow
+    initializeSlideshowStyles();
+    startSlideshow();
 
-        // Pause slideshow on hover
-        slideshow.addEventListener('mouseenter', stopSlideshow);
-        slideshow.addEventListener('mouseleave', startSlideshow);
+    // Pause slideshow on hover
+    slideshow.addEventListener('mouseenter', stopSlideshow);
+    slideshow.addEventListener('mouseleave', startSlideshow);
 
-        // === Reminders Functionality ===
-        const reminders = [
-            // Examples of reminders
-            {
-                type: 'weekly',
-                daysOfWeek: [1, 5],
-                title: 'Garbage Pickup Day',
-                description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-            },
-            {
-                type: 'weekly',
-                daysOfWeek: [2],
-                title: 'Recycling Pickup Day',
-                description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-            },
-            {
-                type: 'monthly',
-                dayOfMonth: 1,
-                title: 'Inventory',
-                description: ' '
-            },
-            {
-                type: 'specificDate',
-                date: '2024-10-28',
-                title: 'New Items Launching',
-                description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
-            },
-            {
-                type: 'specificDate',
-                date: '2024-11-25',
-                title: 'New Blizzard',
-                description: 'Peppermint hot cocoa'
-            },
-        ];
+    // === Reminders Functionality ===
+    const reminders = [
+        // Examples of reminders
+        {
+            type: 'weekly',
+            daysOfWeek: [1, 5], // Monday and Friday
+            title: 'Garbage Pickup Day',
+            description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+        },
+        {
+            type: 'weekly',
+            daysOfWeek: [2], // Tuesday
+            title: 'Recycling Pickup Day',
+            description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+        },
+        {
+            type: 'monthly',
+            dayOfMonth: 1,
+            title: 'Inventory',
+            description: ' '
+        },
+        {
+            type: 'specificDate',
+            date: '2024-10-28',
+            title: 'New Items Launching',
+            description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
+        },
+        {
+            type: 'specificDate',
+            date: '2024-11-25',
+            title: 'New Blizzard',
+            description: 'Peppermint hot cocoa'
+        },
+    ];
 
-        // Function to check if a reminder is upcoming
-        function isReminderUpcoming(reminder, today, daysAhead) {
-            const upcomingDate = new Date(today);
-            upcomingDate.setDate(today.getDate() + daysAhead);
+    // Function to check if a reminder is upcoming
+    function isReminderUpcoming(reminder, today, daysAhead) {
+        const upcomingDate = new Date(today);
+        upcomingDate.setDate(today.getDate() + daysAhead);
 
-            switch (reminder.type) {
-                case 'specificDate':
-                    let reminderDate = new Date(reminder.date);
-                    reminderDate.setHours(0, 0, 0, 0);
-                    return reminderDate >= today && reminderDate <= upcomingDate;
-                case 'weekly':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        let dayOfWeek = date.getDay(); // 0=Sunday
-                        if (reminder.daysOfWeek.includes(dayOfWeek)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                case 'monthly':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (date.getDate() === reminder.dayOfMonth) {
-                            return true;
-                        }
-                    }
-                    return false;
-                case 'nthDayOfMonth':
-                    for (let i = 0; i <= daysAhead; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
-                            return true;
-                        }
-                    }
-                    return false;
-                default:
-                    return false;
-            }
-        }
-
-        // Function to check if a date is the nth occurrence of a day of week in the month
-        function isNthDayOfMonth(date, nth, dayOfWeek) {
-            if (date.getDay() !== dayOfWeek) return false;
-            let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-            let dayCount = 0;
-            for (let d = 1; d <= date.getDate(); d++) {
-                let currentDate = new Date(date.getFullYear(), date.getMonth(), d);
-                if (currentDate.getDay() === dayOfWeek) {
-                    dayCount++;
-                    if (currentDate.getDate() === date.getDate() && dayCount === nth) {
+        switch (reminder.type) {
+            case 'specificDate':
+                let reminderDate = new Date(reminder.date);
+                reminderDate.setHours(0, 0, 0, 0);
+                return reminderDate >= today && reminderDate <= upcomingDate;
+            case 'weekly':
+                for (let i = 0; i <= daysAhead; i++) {
+                    let date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    let dayOfWeek = date.getDay(); // 0=Sunday
+                    if (reminder.daysOfWeek.includes(dayOfWeek)) {
                         return true;
                     }
                 }
-            }
-            return false;
-        }
-
-        // Function to display upcoming reminders
-        function displayReminders() {
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-            const daysAhead = 7; // Show reminders for the next 7 days
-            const reminderList = document.getElementById('reminderList');
-            reminderList.innerHTML = '';
-
-            reminders.forEach(function (reminder) {
-                if (isReminderUpcoming(reminder, today, daysAhead)) {
-                    let li = document.createElement('li');
-                    let reminderDate = getReminderDate(reminder, today);
-                    let dateString = reminderDate ? reminderDate.toLocaleDateString() : '';
-                    li.innerHTML = '<strong>' + reminder.title + '</strong> (' + dateString + '): ' + reminder.description;
-                    reminderList.appendChild(li);
-                }
-            });
-        }
-
-        // Function to get the date of the upcoming reminder
-        function getReminderDate(reminder, today) {
-            switch (reminder.type) {
-                case 'specificDate':
-                    return new Date(reminder.date);
-                case 'weekly':
-                    for (let i = 0; i <= 7; i++) {
-                        let date = new Date(today);
-                        date.setDate(today.getDate() + i);
-                        if (reminder.daysOfWeek.includes(date.getDay())) {
-                            return date;
-                        }
-                    }
-                    return null;
-                case 'monthly':
-                    let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
-                    if (date < today) {
-                        date.setMonth(date.getMonth() + 1);
-                    }
-                    return date;
-                case 'nthDayOfMonth':
-                    let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
-                    if (nthDate < today) {
-                        nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
-                    }
-                    return nthDate;
-                default:
-                    return null;
-            }
-        }
-
-        // Function to get the date of the nth occurrence of a day of week in a month
-        function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
-            let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-            let count = 0;
-            while (date.getMonth() === startDate.getMonth()) {
-                if (date.getDay() === dayOfWeek) {
-                    count++;
-                    if (count === nth) {
-                        return new Date(date); // Return a copy of the date
+                return false;
+            case 'monthly':
+                for (let i = 0; i <= daysAhead; i++) {
+                    let date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    if (date.getDate() === reminder.dayOfMonth) {
+                        return true;
                     }
                 }
-                date.setDate(date.getDate() + 1);
-            }
-            return null;
+                return false;
+            case 'nthDayOfMonth':
+                for (let i = 0; i <= daysAhead; i++) {
+                    let date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
+                        return true;
+                    }
+                }
+                return false;
+            default:
+                return false;
         }
+    }
 
-        // Run displayReminders on initialization
-        displayReminders();
+    // Function to check if a date is the nth occurrence of a day of week in the month
+    function isNthDayOfMonth(date, nth, dayOfWeek) {
+        if (date.getDay() !== dayOfWeek) return false;
+        let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        let dayCount = 0;
+        for (let d = 1; d <= date.getDate(); d++) {
+            let currentDate = new Date(date.getFullYear(), date.getMonth(), d);
+            if (currentDate.getDay() === dayOfWeek) {
+                dayCount++;
+                if (currentDate.getDate() === date.getDate() && dayCount === nth) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 
-        // === Sidebar Toggle Script (Optional for Mobile) ===
-        document.getElementById('sidebarToggle').addEventListener('click', function () {
-            const sidebar = document.querySelector('.sidebar');
-            sidebar.classList.toggle('active');
-            const contentWrapper = document.getElementById('content-wrapper');
-            contentWrapper.classList.toggle('active');
+    // Function to display upcoming reminders
+    function displayReminders() {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const daysAhead = 7; // Show reminders for the next 7 days
+        const reminderList = document.getElementById('reminderList');
+        reminderList.innerHTML = '';
+
+        reminders.forEach(function (reminder) {
+            if (isReminderUpcoming(reminder, today, daysAhead)) {
+                let li = document.createElement('li');
+                let reminderDate = getReminderDate(reminder, today);
+                let dateString = reminderDate ? reminderDate.toLocaleDateString() : '';
+                li.innerHTML = '<strong>' + reminder.title + '</strong> (' + dateString + '): ' + reminder.description;
+                reminderList.appendChild(li);
+            }
         });
-    </script>
+    }
+
+    // Function to get the date of the upcoming reminder
+    function getReminderDate(reminder, today) {
+        switch (reminder.type) {
+            case 'specificDate':
+                return new Date(reminder.date);
+            case 'weekly':
+                for (let i = 0; i <= 7; i++) {
+                    let date = new Date(today);
+                    date.setDate(today.getDate() + i);
+                    if (reminder.daysOfWeek.includes(date.getDay())) {
+                        return date;
+                    }
+                }
+                return null;
+            case 'monthly':
+                let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
+                if (date < today) {
+                    date.setMonth(date.getMonth() + 1);
+                }
+                return date;
+            case 'nthDayOfMonth':
+                let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
+                if (nthDate < today) {
+                    nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
+                }
+                return nthDate;
+            default:
+                return null;
+        }
+    }
+
+    // Function to get the date of the nth occurrence of a day of week in a month
+    function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
+        let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+        let count = 0;
+        while (date.getMonth() === startDate.getMonth()) {
+            if (date.getDay() === dayOfWeek) {
+                count++;
+                if (count === nth) {
+                    return new Date(date); // Return a copy of the date
+                }
+            }
+            date.setDate(date.getDate() + 1);
+        }
+        return null;
+    }
+
+    // Run displayReminders on initialization
+    displayReminders();
+
+    // === Open Folder Function (Alternative Toggle for Mobile) ===
+    // If you need an alternative sidebar toggle for mobile devices, uncomment and modify as needed
+    /*
+    document.getElementById('sidebarToggleMobile').addEventListener('click', function () {
+        const sidebar = document.querySelector('.sidebar');
+        const contentWrapper = document.getElementById('content-wrapper');
+        sidebar.classList.toggle('active');
+        contentWrapper.classList.toggle('active');
+    });
+    */
+
+    // === Additional Event Listeners or Functions ===
+    // Add any additional scripts or event listeners below as needed
+</script>
+
 </body>
 
 </html>
