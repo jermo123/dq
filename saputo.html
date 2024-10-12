@@ -29,6 +29,12 @@
             width: 100%;
             padding: 5px;
             box-sizing: border-box;
+            text-align: center; /* Center the text inside number inputs */
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
         }
         @media print {
             body {
@@ -38,15 +44,18 @@
             table {
                 page-break-inside: avoid;
             }
+            button {
+                display: none; /* Hide the print button when printing */
+            }
         }
     </style>
 </head>
 <body>
     <h1>Saputo Order Guide Template</h1>
-<p> All orders must be in by 9 am. </p>
-<p> Phone number: 1-877-341-8700 </p>
-<p> Account number: 4801 4500 </p>
-
+    <p>All orders must be in by 9 am.</p>
+    <p>Phone number: 1-877-341-8700</p>
+    <p>Account number: 4801 4500</p>
+    
     <table>
         <thead>
             <tr>
@@ -55,44 +64,37 @@
                 <th>Mon for Wed</th>
                 <th>Wed for Thurs</th>
                 <th>Sat for Mon</th>
-
-
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>CH-001</td>
+                <td>103957</td>
                 <td>Vanilla Soft Serve</td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
-
             </tr>
             <tr>
-                <td>CH-002</td>
+                <td>103960</td>
                 <td>Chocolate Soft Serve</td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
-
             </tr>
             <tr>
-                <td>BT-001</td>
+                <td>150551</td>
                 <td>2% Milk 4L</td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
-
             </tr>
             <tr>
-                <td>BT-002</td>
+                <td>130376</td>
                 <td>Coffee Creamer</td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
                 <td><input type="number" min="0" value="0"></td>
-
             </tr>
-
         </tbody>
     </table>
 
