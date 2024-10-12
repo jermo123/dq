@@ -3,106 +3,152 @@
 <head>
     <meta charset="UTF-8">
     <title>Temperature Log Sheet</title>
-    <style>
+<style>
+    /* Base Styles */
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        background-color: #ffffff;
+        font-size: 9pt; /* Reduced font size slightly */
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    h1, h2 {
+        text-align: center;
+        margin: 4pt 0; /* Reduced margins */
+    }
+    
+    h1 {
+        font-size: 14pt; /* Reduced font size */
+    }
+    
+    h2 {
+        font-size: 11pt;
+        margin-bottom: 8pt;
+    }
+    
+    table.main-table {
+        width: 100%;
+        border-collapse: collapse;
+        font-size: 8pt; /* Reduced font size */
+        table-layout: fixed;
+    }
+    
+    table.main-table th, table.main-table td {
+        border: 1px solid #000;
+        padding: 1pt; /* Reduced padding */
+        text-align: center;
+        vertical-align: middle;
+        word-wrap: break-word;
+    }
+    
+    table.main-table th {
+        background-color: #f2f2f2;
+        font-size: 8pt;
+    }
+    
+    .temp-range {
+        font-size: 7pt; /* Reduced font size */
+        color: #000;
+        font-weight: bold;
+    }
+    
+    .area-title td {
+        background-color: #f0f0f0;
+        font-weight: bold;
+        text-align: left;
+        padding-left: 3pt; /* Reduced padding */
+        font-size: 9pt;
+    }
+    
+    .temp-entry {
+        font-size: 8pt;
+        line-height: 1.1;
+    }
+    
+    .temp-entry-small {
+        font-size: 7pt;
+        line-height: 1;
+    }
+    
+    .underline-space {
+        border-bottom: 1px solid #000;
+        display: inline-block;
+        width: 18pt; /* Reduced width */
+        margin: 0 1pt;
+        position: relative;
+        top: 5pt; /* Moved line lower */
+    }
+    
+    .signature-section {
+        display: flex;
+        justify-content: space-between;
+        margin-top: 8pt; /* Reduced margin */
+        max-width: 180mm; /* Adjusted width */
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    .signature {
+        width: 45%;
+        text-align: center;
+    }
+    
+    .signature-line {
+        border-top: 1px solid #000;
+        margin-top: 15pt; /* Reduced margin */
+    }
+    
+.dishwasher-entry {
+    font-size: 7pt;
+    line-height: 1;
+}
+
+.dishwasher-entry div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 1pt 0;
+}
+
+.dishwasher-entry span {
+    margin: 0 1pt;
+}
+
+.dishwasher-entry .underline-space {
+    position: relative;
+    top: 1pt; /* Adjusted to align with text */
+}
+
+    
+    /* Print-Friendly Styles */
+    @media print {
+        @page {
+            size: A4 portrait;
+            margin: 5mm;
+        }
+        
         body {
-            font-family: Arial, sans-serif;
-            margin: 10mm;
-            background-color: #ffffff;
-            font-size: 10px;
+            margin: 0;
         }
-        h1, h2 {
-            text-align: center;
-            margin: 5px 0;
+        
+        /* Hide non-printable elements */
+        button, .non-printable {
+            display: none;
         }
-        h2 {
-            font-size: 12px;
-            margin-bottom: 10px;
+        
+        /* Prevent page breaks inside table rows */
+        table, tr, td, th {
+            page-break-inside: avoid;
         }
-        table.main-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 8px;
-            table-layout: fixed;
-        }
-        table.main-table th, table.main-table td {
-            border: 1px solid #000;
-            padding: 1px;
-            text-align: center;
-            vertical-align: middle;
-            word-wrap: break-word;
-        }
-        table.main-table th {
-            background-color: #f2f2f2;
-            font-size: 8px;
-        }
-        .temp-range {
-            font-size: 7px;
-            color: #000;
-            font-weight: bold;
-        }
-        .area-title {
-            background-color: #f0f0f0;
-            font-weight: bold;
-            text-align: left;
-            padding-left: 5px;
-            font-size: 9px;
-        }
-        .temp-entry {
-            font-size: 8px;
-            line-height: 1.2;
-        }
-        .temp-entry-small {
-            font-size: 7px;
-            line-height: 1.1;
-        }
-        .underline-space {
-            border-bottom: 1px solid #000;
-            display: inline-block;
-            width: 20px;
-            margin: 0 2px;
-            position: relative;
-            top: 3px;
-        }
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .signature {
-            width: 45%;
-            text-align: center;
-        }
-        .signature-line {
-            border-top: 1px solid #000;
-            margin-top: 20px;
-        }
-        /* Print-friendly Styles */
-        @media print {
-            body {
-                margin: 5mm;
-            }
-            table {
-                font-size: 8px;
-            }
-            h1 {
-                font-size: 14px;
-            }
-            h2 {
-                font-size: 10px;
-            }
-            .temp-range {
-                font-size: 7px;
-                color: #000;
-            }
-        }
-    </style>
-</head>
+    }
+</style>
+
+
+ </head>
 <body>
     <h1>Temperature Log Sheet</h1>
-    <h2>Store: 26949 | Address: 1030 Cliffe Avenue, Courtenay, BC</h2>
     
     <!-- Main Temperature Log Table -->
     <table class="main-table">
@@ -233,38 +279,89 @@
                 <td class="temp-entry"><span class="underline-space"></span></td>
                 <td class="temp-entry"><span class="underline-space"></span></td>
             </tr>
-            <!-- Dishwasher -->
-            <tr>
-                <td>Dishwasher <br><span class="temp-range">150-160°F</span></td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-                <td class="temp-entry-small">
-                    DH:<span class="underline-space"></span> DL:<span class="underline-space"></span><br>
-                    NH:<span class="underline-space"></span> NL:<span class="underline-space"></span>
-                </td>
-            </tr>
+<!-- Dishwasher -->
+<tr>
+    <td>Dishwasher <br><span class="temp-range">150-160°F</span></td>
+    <!-- Monday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Tuesday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Wednesday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Thursday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Friday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Saturday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+    <!-- Sunday -->
+    <td class="dishwasher-entry">
+        <div>
+            <span>DH:</span> <span class="underline-space"></span>
+            <span>DL:</span> <span class="underline-space"></span>
+        </div>
+        <div>
+            <span>NH:</span> <span class="underline-space"></span>
+            <span>NL:</span> <span class="underline-space"></span>
+        </div>
+    </td>
+</tr>
+
+
             <!-- Beef Cookout -->
             <tr>
                 <td>Beef Cookout <br><span class="temp-range">165-175°F</span></td>
