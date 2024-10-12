@@ -11,27 +11,42 @@
     h1, p {
       text-align: center;
     }
+    p {
+      margin-top: 20px;
+    }
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
+      margin-top: 10px;
     }
     th, td {
       border: 1px solid black;
       padding: 8px;
-      text-align: left;
+    }
+    /* Center align Par, Count, and Need columns */
+    td:nth-child(2), td:nth-child(3), td:nth-child(4),
+    th:nth-child(2), th:nth-child(3), th:nth-child(4) {
+      text-align: center;
+    }
+    /* Highlight editable fields */
+    td[contenteditable="true"], span[contenteditable="true"] {
+      background-color: #f0f0f0;
     }
     @media print {
       /* Ensure proper printing */
       body {
         color: black;
       }
+      thead { display: table-header-group; }
+      td[contenteditable="true"], span[contenteditable="true"] {
+        background-color: transparent;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Kitchen Inventory Count Sheet</h1>
-  <p>Date: ____________</p>
+  <p>Date: <span contenteditable="true">________</span></p>
   <table>
     <thead>
       <tr>
@@ -44,97 +59,97 @@
     <tbody>
       <tr>
         <td>Gravy buckets</td>
-        <td>4</td>
+        <td contenteditable="true">4</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Grilled chicken in rectangle bucket</td>
-        <td>1.5</td>
+        <td contenteditable="true">1.5</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Bacon bits (square bucket)</td>
-        <td>0.25</td>
+        <td contenteditable="true">0.25</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Tortillas (bags)</td>
-        <td>8</td>
+        <td contenteditable="true">8</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Pretzel sticks (containers)</td>
-        <td>1.5</td>
+        <td contenteditable="true">1.5</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Mushroom sauce (bags)</td>
-        <td>3</td>
+        <td contenteditable="true">3</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Pickles (prep containers)</td>
-        <td>5</td>
+        <td contenteditable="true">5</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Tomatoes (prep containers)</td>
-        <td>4</td>
+        <td contenteditable="true">4</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Ketchup (bottles)</td>
-        <td>8</td>
+        <td contenteditable="true">8</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Mayo (bottles)</td>
-        <td>8</td>
+        <td contenteditable="true">8</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Mustard (bottles)</td>
-        <td>8</td>
+        <td contenteditable="true">8</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Flamethrower sauce (bottles)</td>
-        <td>8</td>
+        <td contenteditable="true">8</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Flamethrower sides (large container)</td>
-        <td>1</td>
+        <td contenteditable="true">1</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Ranch sides (large container)</td>
-        <td>1</td>
+        <td contenteditable="true">1</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Buffalo sides (container)</td>
-        <td>0.5</td>
+        <td contenteditable="true">0.5</td>
         <td></td>
         <td></td>
       </tr>
       <tr>
         <td>Shredded cheese (container)</td>
-        <td>0.5</td>
+        <td contenteditable="true">0.5</td>
         <td></td>
         <td></td>
       </tr>
@@ -142,4 +157,3 @@
   </table>
 </body>
 </html>
-

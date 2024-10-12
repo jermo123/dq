@@ -48,6 +48,10 @@
       width: 20%;
       text-align: center;
     }
+    /* Highlight editable fields */
+    td[contenteditable="true"], span[contenteditable="true"] {
+      background-color: #f0f0f0;
+    }
     @media print {
       body {
         color: black;
@@ -59,12 +63,16 @@
       th, td {
         padding: 3px;
       }
+      thead { display: table-header-group; }
+      td[contenteditable="true"], span[contenteditable="true"] {
+        background-color: transparent;
+      }
     }
   </style>
 </head>
 <body>
   <h1>Ice Cream Inventory Count Sheet</h1>
-  <p>Date: ____________</p>
+  <p>Date: <span contenteditable="true">________</span></p>
   <table>
     <thead>
       <tr>
@@ -81,27 +89,27 @@
       </tr>
       <tr>
         <td class="item">8-inch (shelves)</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">10-inch (shelves)</td>
-        <td class="par">2</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">2</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Sheet Cake (cakes)</td>
-        <td class="par">8</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">8</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Log Cakes (cakes)</td>
-        <td class="par">16</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">16</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Decorated Cakes -->
       <tr>
@@ -109,27 +117,27 @@
       </tr>
       <tr>
         <td class="item">8-inch</td>
-        <td class="par">20</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">20</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">10-inch</td>
-        <td class="par">20</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">20</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Sheet Cake</td>
-        <td class="par">2</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">2</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Log Cake</td>
-        <td class="par">15</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">15</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Boxed Novelties -->
       <tr>
@@ -137,15 +145,15 @@
       </tr>
       <tr>
         <td class="item">Buster Bars (boxes)</td>
-        <td class="par">25</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">25</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Sandwiches (boxes)</td>
-        <td class="par">5</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">5</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Crates of Novelties -->
       <tr>
@@ -153,15 +161,15 @@
       </tr>
       <tr>
         <td class="item">Buster Bars (crates)</td>
-        <td class="par">15</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">15</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Sandwiches (crates)</td>
-        <td class="par">1</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">1</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Decorated Blizzard Cakes -->
       <tr>
@@ -169,45 +177,45 @@
       </tr>
       <tr>
         <td class="item">Oreo</td>
-        <td class="par">8</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">8</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
-        <td class="item">Cappuccino Score</td>
-        <td class="par">2</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="item">Cappuccino Skor</td>
+        <td class="par" contenteditable="true">2</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Cookie Dough</td>
-        <td class="par">4</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">4</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Peanut Butter Cup</td>
-        <td class="par">8</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">8</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Chocolate Extreme</td>
-        <td class="par">4</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">4</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Strawberry Cheesecake</td>
-        <td class="par">4</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">4</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Blizzard of the Month</td>
-        <td class="par">1</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">1</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Spare Pans of Frozen Blizzard Cakes -->
       <tr>
@@ -215,45 +223,45 @@
       </tr>
       <tr>
         <td class="item">Oreo</td>
-        <td class="par">4</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">4</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
-        <td class="item">Cappuccino Score</td>
-        <td class="par">2</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="item">Cappuccino Skor</td>
+        <td class="par" contenteditable="true">2</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Cookie Dough</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Peanut Butter Cup</td>
-        <td class="par">4</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">4</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Chocolate Extreme</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Blizzard of the Month</td>
-        <td class="par">0</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">0</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Strawberry Cheesecake</td>
-        <td class="par">2</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">2</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <!-- Treatzza Pizzas -->
       <tr>
@@ -261,27 +269,27 @@
       </tr>
       <tr>
         <td class="item">Reese's</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Smarties</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
         <td class="item">Chocolate Brownie</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
       <tr>
-        <td class="item">Score</td>
-        <td class="par">3</td>
-        <td class="count" contenteditable="true"></td>
-        <td class="need" contenteditable="true"></td>
+        <td class="item">Skor</td>
+        <td class="par" contenteditable="true">3</td>
+        <td class="count"></td>
+        <td class="need"></td>
       </tr>
     </tbody>
   </table>
