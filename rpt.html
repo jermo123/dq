@@ -258,6 +258,39 @@
                 keyValuePairs.push({ key: 'Mobile Total', value: '$' + mobileTotal.toFixed(2) });
             }
 
+            // **New Code Starts Here**
+            // Process 'Revenue Centers' section to compute 'Soft Serve + Novelties'
+            if (sections['Revenue Centers']) {
+                var revenueCentersSection = sections['Revenue Centers'];
+                var headers = revenueCentersSection[1];
+                var totalIndex = headers.indexOf('Total');
+                var softServeTotal = 0;
+                var noveltiesBoxedTotal = 0;
+
+                if (totalIndex !== -1) {
+                    revenueCentersSection.slice(2).forEach(function(row) {
+                        var centerName = row[0];
+                        var totalCell = row[totalIndex];
+                        if (totalCell) {
+                            // Remove commas and dollar signs, convert to number
+                            var totalValue = parseFloat(totalCell.replace(/[^0-9.-]+/g,""));
+                            if (!isNaN(totalValue)) {
+                                if (centerName === 'Soft Serve') {
+                                    softServeTotal += totalValue;
+                                }
+                                if (centerName === 'Novelties-Boxed') {
+                                    noveltiesBoxedTotal += totalValue;
+                                }
+                            }
+                        }
+                    });
+                }
+
+                var softServeNoveltiesTotal = softServeTotal + noveltiesBoxedTotal;
+                keyValuePairs.push({ key: 'Soft Serve + Novelties', value: '$' + softServeNoveltiesTotal.toFixed(2) });
+            }
+            // **New Code Ends Here**
+
             // Create table with four columns
             var numColumns = 4;
             var table = document.createElement('table');

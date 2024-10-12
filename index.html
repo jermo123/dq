@@ -637,169 +637,285 @@
     slideshow.addEventListener('mouseenter', stopSlideshow);
     slideshow.addEventListener('mouseleave', startSlideshow);
 
-    // === Reminders Functionality ===
-    const reminders = [
-        // Examples of reminders
-        {
-            type: 'weekly',
-            daysOfWeek: [1, 5], // Monday and Friday
-            title: 'Garbage Pickup Day',
-            description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-        },
-        {
-            type: 'weekly',
-            daysOfWeek: [2], // Tuesday
-            title: 'Recycling Pickup Day',
-            description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
-        },
-        {
-            type: 'monthly',
-            dayOfMonth: 1,
-            title: 'Inventory',
-            description: ' '
-        },
-        {
-            type: 'specificDate',
-            date: '2024-10-28',
-            title: 'New Items Launching',
-            description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
-        },
-        {
-            type: 'specificDate',
-            date: '2024-11-25',
-            title: 'New Blizzard',
-            description: 'Peppermint hot cocoa'
-        },
-    ];
+// === Reminders Functionality ===
+const reminders = [
+    // Existing reminders
+    {
+        type: 'weekly',
+        daysOfWeek: [1, 5], // Monday and Friday
+        title: 'Garbage Pickup Day',
+        description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+    },
+    {
+        type: 'weekly',
+        daysOfWeek: [2], // Tuesday
+        title: 'Recycling Pickup Day',
+        description: '<a href="https://docs.google.com/forms/d/e/1FAIpQLSdggWHDDqHn3jetrel2urG00Kh74LWltTho3Y9QB7zBre7QpQ/viewform?usp=sf_link">Form</a>'
+    },
+    {
+        type: 'monthly',
+        dayOfMonth: 1,
+        title: 'Inventory',
+        description: ' '
+    },
+    {
+        type: 'specificDate',
+        date: '2024-10-28',
+        title: 'New Items Launching',
+        description: 'Honey garlic strips, frozen hot chocolate, caramel java chip blizzard'
+    },
+    {
+        type: 'specificDate',
+        date: '2024-11-25',
+        title: 'New Blizzard',
+        description: 'Peppermint hot cocoa'
+    },
+    // Added specific date reminders
+    // Income Assistance
+    {
+        type: 'specificDate',
+        date: '2024-10-23',
+        title: 'Income Assistance',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-11-20',
+        title: 'Income Assistance',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-12-18',
+        title: 'Income Assistance',
+        description: ''
+    },
+    // Canada Child Benefit
+    {
+        type: 'specificDate',
+        date: '2024-10-20',
+        title: 'Canada Child Benefit',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-11-20',
+        title: 'Canada Child Benefit',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-12-13',
+        title: 'Canada Child Benefit',
+        description: ''
+    },
+    // GST Credit
+    {
+        type: 'specificDate',
+        date: '2024-10-05',
+        title: 'GST Credit',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2025-01-05',
+        title: 'GST Credit',
+        description: ''
+    },
+    // Old Age Security and Pension Plan
+    {
+        type: 'specificDate',
+        date: '2024-10-27',
+        title: 'Old Age Security and Pension Plan',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-11-28',
+        title: 'Old Age Security and Pension Plan',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-12-20',
+        title: 'Old Age Security and Pension Plan',
+        description: ''
+    },
+    // Holidays
+    {
+        type: 'specificDate',
+        date: '2024-10-14',
+        title: 'Thanksgiving',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-11-29',
+        title: 'Black Friday',
+        description: ''
+    },
+    {
+        type: 'specificDate',
+        date: '2024-12-25',
+        title: 'Christmas',
+        description: ''
+    },
+];
 
-    // Function to check if a reminder is upcoming
-    function isReminderUpcoming(reminder, today, daysAhead) {
-        const upcomingDate = new Date(today);
-        upcomingDate.setDate(today.getDate() + daysAhead);
+// Function to check if a reminder is upcoming
+function isReminderUpcoming(reminder, today, daysAhead) {
+    const upcomingDate = new Date(today);
+    upcomingDate.setDate(today.getDate() + daysAhead);
 
-        switch (reminder.type) {
-            case 'specificDate':
-                let reminderDate = new Date(reminder.date);
-                reminderDate.setHours(0, 0, 0, 0);
-                return reminderDate >= today && reminderDate <= upcomingDate;
-            case 'weekly':
-                for (let i = 0; i <= daysAhead; i++) {
-                    let date = new Date(today);
-                    date.setDate(today.getDate() + i);
-                    let dayOfWeek = date.getDay(); // 0=Sunday
-                    if (reminder.daysOfWeek.includes(dayOfWeek)) {
-                        return true;
-                    }
-                }
-                return false;
-            case 'monthly':
-                for (let i = 0; i <= daysAhead; i++) {
-                    let date = new Date(today);
-                    date.setDate(today.getDate() + i);
-                    if (date.getDate() === reminder.dayOfMonth) {
-                        return true;
-                    }
-                }
-                return false;
-            case 'nthDayOfMonth':
-                for (let i = 0; i <= daysAhead; i++) {
-                    let date = new Date(today);
-                    date.setDate(today.getDate() + i);
-                    if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
-                        return true;
-                    }
-                }
-                return false;
-            default:
-                return false;
-        }
-    }
-
-    // Function to check if a date is the nth occurrence of a day of week in the month
-    function isNthDayOfMonth(date, nth, dayOfWeek) {
-        if (date.getDay() !== dayOfWeek) return false;
-        let firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
-        let dayCount = 0;
-        for (let d = 1; d <= date.getDate(); d++) {
-            let currentDate = new Date(date.getFullYear(), date.getMonth(), d);
-            if (currentDate.getDay() === dayOfWeek) {
-                dayCount++;
-                if (currentDate.getDate() === date.getDate() && dayCount === nth) {
+    switch (reminder.type) {
+        case 'specificDate':
+            let [year, month, day] = reminder.date.split('-').map(Number);
+            let reminderDate = new Date(year, month - 1, day);
+            reminderDate.setHours(0, 0, 0, 0);
+            return reminderDate >= today && reminderDate <= upcomingDate;
+        case 'weekly':
+            for (let i = 0; i <= daysAhead; i++) {
+                let date = new Date(today);
+                date.setDate(today.getDate() + i);
+                let dayOfWeek = date.getDay(); // 0=Sunday
+                if (reminder.daysOfWeek.includes(dayOfWeek)) {
                     return true;
                 }
             }
-        }
-        return false;
-    }
-
-    // Function to display upcoming reminders
-    function displayReminders() {
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-        const daysAhead = 7; // Show reminders for the next 7 days
-        const reminderList = document.getElementById('reminderList');
-        reminderList.innerHTML = '';
-
-        reminders.forEach(function (reminder) {
-            if (isReminderUpcoming(reminder, today, daysAhead)) {
-                let li = document.createElement('li');
-                let reminderDate = getReminderDate(reminder, today);
-                let dateString = reminderDate ? reminderDate.toLocaleDateString() : '';
-                li.innerHTML = '<strong>' + reminder.title + '</strong> (' + dateString + '): ' + reminder.description;
-                reminderList.appendChild(li);
-            }
-        });
-    }
-
-    // Function to get the date of the upcoming reminder
-    function getReminderDate(reminder, today) {
-        switch (reminder.type) {
-            case 'specificDate':
-                return new Date(reminder.date);
-            case 'weekly':
-                for (let i = 0; i <= 7; i++) {
-                    let date = new Date(today);
-                    date.setDate(today.getDate() + i);
-                    if (reminder.daysOfWeek.includes(date.getDay())) {
-                        return date;
-                    }
-                }
-                return null;
-            case 'monthly':
-                let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
-                if (date < today) {
-                    date.setMonth(date.getMonth() + 1);
-                }
-                return date;
-            case 'nthDayOfMonth':
-                let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
-                if (nthDate < today) {
-                    nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
-                }
-                return nthDate;
-            default:
-                return null;
-        }
-    }
-
-    // Function to get the date of the nth occurrence of a day of week in a month
-    function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
-        let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
-        let count = 0;
-        while (date.getMonth() === startDate.getMonth()) {
-            if (date.getDay() === dayOfWeek) {
-                count++;
-                if (count === nth) {
-                    return new Date(date); // Return a copy of the date
+            return false;
+        case 'monthly':
+            for (let i = 0; i <= daysAhead; i++) {
+                let date = new Date(today);
+                date.setDate(today.getDate() + i);
+                if (date.getDate() === reminder.dayOfMonth) {
+                    return true;
                 }
             }
-            date.setDate(date.getDate() + 1);
-        }
-        return null;
+            return false;
+        case 'nthDayOfMonth':
+            for (let i = 0; i <= daysAhead; i++) {
+                let date = new Date(today);
+                date.setDate(today.getDate() + i);
+                if (isNthDayOfMonth(date, reminder.nth, reminder.dayOfWeek)) {
+                    return true;
+                }
+            }
+            return false;
+        default:
+            return false;
     }
+}
 
-    // Run displayReminders on initialization
-    displayReminders();
+// Function to check if a date is the nth occurrence of a day of week in the month
+function isNthDayOfMonth(date, nth, dayOfWeek) {
+    if (date.getDay() !== dayOfWeek) return false;
+    let count = 0;
+    let tempDate = new Date(date.getFullYear(), date.getMonth(), 1);
+    while (tempDate <= date) {
+        if (tempDate.getDay() === dayOfWeek) {
+            count++;
+        }
+        tempDate.setDate(tempDate.getDate() + 1);
+    }
+    return count === nth;
+}
+
+// Function to display upcoming reminders
+// Function to display upcoming reminders
+function displayReminders() {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const daysAhead = 14; // Show reminders for the next 14 days
+    const reminderList = document.getElementById('reminderList');
+    reminderList.innerHTML = '';
+
+    // Array to hold upcoming reminders with their dates
+    let upcomingReminders = [];
+
+    reminders.forEach(function (reminder) {
+        if (isReminderUpcoming(reminder, today, daysAhead)) {
+            let reminderDate = getReminderDate(reminder, today);
+            if (reminderDate) {
+                upcomingReminders.push({
+                    reminder: reminder,
+                    date: reminderDate
+                });
+            }
+        }
+    });
+
+    // Sort the upcoming reminders by date
+    upcomingReminders.sort(function (a, b) {
+        return a.date - b.date;
+    });
+
+    // Display the sorted reminders
+    upcomingReminders.forEach(function (item) {
+        let li = document.createElement('li');
+        let dateString = item.date.toLocaleDateString();
+
+        // Check if the reminder date is today
+        let isToday = item.date.getTime() === today.getTime();
+
+        // Add a star if the reminder is today
+        let star = isToday ? ' ★' : '';
+
+        li.innerHTML = '<strong>' + item.reminder.title + '</strong>' + star + ' (' + dateString + '): ' + item.reminder.description;
+        reminderList.appendChild(li);
+    });
+}
+
+
+// Function to get the date of the upcoming reminder
+function getReminderDate(reminder, today) {
+    switch (reminder.type) {
+        case 'specificDate':
+            let [year, month, day] = reminder.date.split('-').map(Number);
+            return new Date(year, month - 1, day);
+        case 'weekly':
+            for (let i = 0; i <= 7; i++) {
+                let date = new Date(today);
+                date.setDate(today.getDate() + i);
+                if (reminder.daysOfWeek.includes(date.getDay())) {
+                    return date;
+                }
+            }
+            return null;
+        case 'monthly':
+            let date = new Date(today.getFullYear(), today.getMonth(), reminder.dayOfMonth);
+            if (date < today) {
+                date.setMonth(date.getMonth() + 1);
+            }
+            return date;
+        case 'nthDayOfMonth':
+            let nthDate = getNthDayOfMonthDate(today, reminder.nth, reminder.dayOfWeek);
+            if (nthDate < today) {
+                nthDate = getNthDayOfMonthDate(new Date(today.getFullYear(), today.getMonth() + 1, 1), reminder.nth, reminder.dayOfWeek);
+            }
+            return nthDate;
+        default:
+            return null;
+    }
+}
+
+// Function to get the date of the nth occurrence of a day of week in a month
+function getNthDayOfMonthDate(startDate, nth, dayOfWeek) {
+    let date = new Date(startDate.getFullYear(), startDate.getMonth(), 1);
+    let count = 0;
+    while (date.getMonth() === startDate.getMonth()) {
+        if (date.getDay() === dayOfWeek) {
+            count++;
+            if (count === nth) {
+                return new Date(date); // Return a copy of the date
+            }
+        }
+        date.setDate(date.getDate() + 1);
+    }
+    return null;
+}
+
+// Run displayReminders on initialization
+displayReminders();
 
     // === Open Folder Function (Alternative Toggle for Mobile) ===
     // If you need an alternative sidebar toggle for mobile devices, uncomment and modify as needed
