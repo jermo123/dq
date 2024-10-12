@@ -1,157 +1,145 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Kitchen Counting Sheet</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-            background-color: #ffffff;
-        }
-        h1 {
-            text-align: center;
-            color: #00539f;
-            margin-bottom: 10px;
-        }
-        h2 {
-            color: #e31837;
-            font-size: 14px;
-            margin-top: 30px;
-            margin-bottom: 10px;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 20px;
-            font-size: 12px;
-        }
-        th, td {
-            border: 1px solid #000;
-            padding: 6px;
-            text-align: center;
-        }
-        th {
-            background-color: #f2f2f2;
-        }
-        .category-header {
-            background-color: #d9edf7;
-            font-weight: bold;
-            text-align: left;
-        }
-        .calculation-section {
-            margin-top: 20px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-            font-size: 12px;
-        }
-        .calculation-section p {
-            margin: 5px 0;
-        }
-        .signature-section {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 30px;
-            max-width: 800px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .signature {
-            width: 45%;
-            text-align: center;
-        }
-        .signature-line {
-            border-top: 1px solid #000;
-            margin-top: 60px;
-        }
-        /* Print-friendly Styles */
-        @media print {
-            body {
-                margin: 10mm;
-            }
-        }
-    </style>
+  <title>Kitchen Inventory Count Sheet</title>
+  <style>
+    /* Printer-friendly styles */
+    body {
+      font-family: Arial, sans-serif;
+      color: black;
+    }
+    h1, p {
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+      text-align: left;
+    }
+    @media print {
+      /* Ensure proper printing */
+      body {
+        color: black;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>Kitchen Counting Sheet</h1>
-    <p style="text-align: center; font-size: 12px;">Store: 26949 | Address: 1030 Cliffe Avenue, Courtenay, BC</p>
-
-    <!-- Toppings Section -->
-    <h2>Toppings</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Current Stock</th>
-                <th>Par Level</th>
-                <th>Needed</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Example Row -->
-            <tr>
-                <td>Oreo Topping</td>
-                <td>__________________</td>
-                <td>__________________</td>
-                <td>__________________</td>
-            </tr>
-            <tr>
-                <td>Skor Topping</td>
-                <td>__________________</td>
-                <td>__________________</td>
-                <td>__________________</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Sauces Section -->
-    <h2>Sauces</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Current Stock</th>
-                <th>Par Level</th>
-                <th>Needed</th>
-            </tr>
-        </thead>
-        <tbody>
-            <!-- Example Row -->
-            <tr>
-                <td>Chocolate Sauce</td>
-                <td>__________________</td>
-                <td>__________________</td>
-                <td>__________________</td>
-            </tr>
-            <tr>
-                <td>Strawberry Sauce</td>
-                <td>__________________</td>
-                <td>__________________</td>
-                <td>__________________</td>
-            </tr>
-            <!-- Add more rows as needed -->
-        </tbody>
-    </table>
-
-    <!-- Calculation Section -->
-    <div class="calculation-section">
-        <p><strong>Total Needed (Toppings):</strong> __________________</p>
-        <p><strong>Total Needed (Sauces):</strong> __________________</p>
-        <p><strong>Overall Total Needed:</strong> __________________</p>
-    </div>
-
-    <!-- Signature Section -->
-    <div class="signature-section">
-        <div class="signature">
-            <div class="signature-line"></div>
-            <p>Employee Signature</p>
-        </div>
-        <div class="signature">
-            <div class="signature-line"></div>
-            <p>Supervisor Signature</p>
-        </div>
-    </div>
+  <h1>Kitchen Inventory Count Sheet</h1>
+  <p>Date: ____________</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Par</th>
+        <th>Count</th>
+        <th>Need</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Gravy buckets</td>
+        <td>4</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Grilled chicken in rectangle bucket</td>
+        <td>1.5</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Bacon bits (square bucket)</td>
+        <td>0.25</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Tortillas (bags)</td>
+        <td>8</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Pretzel sticks (containers)</td>
+        <td>1.5</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Mushroom sauce (bags)</td>
+        <td>3</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Pickles (prep containers)</td>
+        <td>5</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Tomatoes (prep containers)</td>
+        <td>4</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Ketchup (bottles)</td>
+        <td>8</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Mayo (bottles)</td>
+        <td>8</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Mustard (bottles)</td>
+        <td>8</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Flamethrower sauce (bottles)</td>
+        <td>8</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Flamethrower sides (large container)</td>
+        <td>1</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Ranch sides (large container)</td>
+        <td>1</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Buffalo sides (container)</td>
+        <td>0.5</td>
+        <td></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>Shredded cheese (container)</td>
+        <td>0.5</td>
+        <td></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
 </body>
 </html>
+

@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Topping Levels Chart</title>
+    <title>Topping Levels</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -12,61 +12,80 @@
         h1 {
             text-align: center;
             margin-bottom: 10px;
+            font-size: 24px;
         }
         table {
             width: 100%;
-            max-width: 800px; /* Ensures table doesn't exceed page width */
-            margin: 0 auto; /* Centers the table */
+            max-width: 800px;
+            margin: 0 auto;
             border-collapse: collapse;
             margin-top: 10px;
+            table-layout: fixed; /* Helps in fitting the table within the page */
         }
         th, td {
             border: 1px solid #000;
-            padding: 8px; /* Reduced padding to save space */
+            padding: 4px;
             text-align: center;
-            font-size: 14px; /* Ensures text is legible */
+            font-size: 12px;
+            word-wrap: break-word; /* Allows text to wrap within cells */
         }
         th {
-            background-color: #dddddd;
+            background-color: #f0f0f0;
         }
         input[type="text"] {
             width: 100%;
-            padding: 5px;
-            font-size: 14px; /* Matches font size of table text */
+            padding: 3px;
+            font-size: 12px;
             box-sizing: border-box;
+            text-align: center; /* Center the text */
         }
         .add-button {
             margin-top: 10px;
-            padding: 8px 16px;
-            background-color: #00539f;
+            padding: 6px 12px;
+            background-color: #333333; /* Dark color for B&W printing */
             color: #ffffff;
             border: none;
             cursor: pointer;
-            border-radius: 5px;
+            border-radius: 3px;
             transition: background-color 0.3s ease;
             display: block;
             margin-left: auto;
             margin-right: auto;
         }
         .add-button:hover {
-            background-color: #e31837;
+            background-color: #555555;
         }
-        /* Print-friendly Styles */
+        .delete-button {
+            background: none;
+            border: none;
+            color: #333333;
+            cursor: pointer;
+            font-size: 14px;
+            padding: 2px;
+        }
+        /* Hide Action column and buttons when printing */
         @media print {
-            .add-button {
+            .add-button, .delete-button, .action-column {
                 display: none;
             }
             body {
-                margin: 10mm;
+                margin: 5mm;
             }
             table {
                 page-break-inside: avoid;
+                font-size: 10px; /* Reduce font size for printing */
+            }
+            th, td {
+                padding: 2px;
+            }
+            h1 {
+                font-size: 18px;
             }
         }
     </style>
     <script>
         function addRow() {
-            var table = document.getElementById("toppingTable");
+            var table = document.getElementById("toppingTable").getElementsByTagName('tbody')[0];
             var row = table.insertRow(-1);
 
             var cell1 = row.insertCell(0);
@@ -84,36 +103,150 @@
             var dtInput = document.createElement("input");
             dtInput.type = "text";
             cell3.appendChild(dtInput);
+
+            var cell4 = row.insertCell(3);
+            cell4.className = "action-column"; // Add class to Action cell
+            var deleteButton = document.createElement("button");
+            deleteButton.innerHTML = "×";
+            deleteButton.className = "delete-button";
+            deleteButton.onclick = function() { deleteRow(this); };
+            cell4.appendChild(deleteButton);
+        }
+
+        function deleteRow(btn) {
+            var row = btn.parentNode.parentNode;
+            row.parentNode.removeChild(row);
         }
     </script>
 </head>
 <body>
-    <h1>Topping Levels Log Sheet</h1>
+    <h1>Topping Levels</h1>
     <table id="toppingTable">
         <thead>
             <tr>
                 <th>Toppings</th>
                 <th>Counter</th>
                 <th>DT</th>
+                <th class="action-column">Action</th> <!-- Add class to header -->
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td>Oreo</td>
-                <td><input type="text"></td>
-                <td><input type="text"></td>
-            </tr>
+            <!-- Toppings List -->
             <tr>
                 <td>Skor</td>
                 <td><input type="text"></td>
                 <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Smarties</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
             </tr>
             <tr>
                 <td>Cookie Dough</td>
                 <td><input type="text"></td>
                 <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
             </tr>
-            <!-- Additional toppings can be added -->
+            <tr>
+                <td>Cheesecake</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Brownie Pieces</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Chocolate Chunks</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Reese's Peanut Butter Cup</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Reese's Pieces</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Turtles</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Pumpkin</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Cobbler Pieces</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Rolo</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Coffee Crunch</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Mint</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Coffee</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Vanilla</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Cocoa Fudge</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+            <tr>
+                <td>Cupfection Brownie</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
+
+            <tr>
+                <td>Nutmeg</td>
+                <td><input type="text"></td>
+                <td><input type="text"></td>
+                <td class="action-column"><button class="delete-button" onclick="deleteRow(this)">×</button></td>
+            </tr>
         </tbody>
     </table>
     <button class="add-button" onclick="addRow()">Add Topping</button>
