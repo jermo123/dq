@@ -3,74 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <title>Dairy Queen Courtenay - Log Sheets Hub</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-        }
-        header {
-            background-color: #e31837;
-            color: white;
-            padding: 20px;
-            text-align: center;
-            position: relative;
-        }
-        header img {
-            position: absolute;
-            left: 20px;
-            top: 10px;
-            width: 80px;
-        }
-        h1 {
-            margin: 0;
-            font-size: 2em;
-        }
-        .container {
-            padding: 40px;
-            text-align: center;
-        }
-        .log-sheet-link {
-            display: inline-block;
-            margin: 20px;
-            padding: 20px;
-            width: 220px;
-            background-color: #ffffff;
-            border: 2px solid #00539f;
-            border-radius: 10px;
-            text-decoration: none;
-            color: #00539f;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-        .log-sheet-link:hover {
-            background-color: #00539f;
-            color: #ffffff;
-            transform: translateY(-5px);
-            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
-        }
-        footer {
-            background-color: #e31837;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-        }
-        /* Responsive Design */
-        @media screen and (max-width: 600px) {
-            .log-sheet-link {
-                width: 100%;
-                margin: 10px 0;
-            }
-            header img {
-                position: static;
-                margin-bottom: 10px;
-            }
-        }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Meta Description for SEO -->
+    <meta name="description" content="Access all your Dairy Queen Courtenay log sheets in one place.">
+    <!-- Favicon -->
+    <link rel="icon" href="dq_favicon.ico" type="image/x-icon">
+    <!-- External Stylesheet -->
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
@@ -80,28 +19,29 @@
     <p>Log Sheets Hub</p>
 </header>
 
-<div class="container">
-    <a href="topping_levels.html" class="log-sheet-link">Topping Levels DT/Counter</a>
-    <a href="cake_prices.html" class="log-sheet-link">Cake Prices Info</a>
-    <a href="cake_novelty_levels.html" class="log-sheet-link">Cake & Novelty Levels</a>
-    <a href="staff_post.html" class="log-sheet-link">General Post to Staff</a>
-    <a href="customer_post.html" class="log-sheet-link">General Post to Customers</a>
-    <a href="daily_jobs.html" class="log-sheet-link">Daily Jobs Sheet</a>
-    <a href="maintenance_log.html" class="log-sheet-link">Maintenance Log Sheet</a>
-    <a href="counting_sheet_cakes_and_novelties.html" class="log-sheet-link">Counting Sheet: Cakes & Novelties</a>
-    <a href="counting_sheet_kitchen.html" class="log-sheet-link">Counting Sheet: Kitchen</a>
-    <a href="saputo.html" class="log-sheet-link">Saputo Order Guide</a>
-    <a href="drive_thru_times.html" class="log-sheet-link">Drive Thru Times <i>Daily</i></a>
-    <a href="drive_thru_times_weekly.html" class="log-sheet-link">Drive Thru Times <i>Weekly</i></a>
-
-    <a href="temperature_log.html" class="log-sheet-link">Temperature Log</a>
-
-
-    <!-- Add more links as needed -->
-</div>
+<main>
+    <section class="container">
+        <ul class="log-sheet-list">
+            <li><a href="topping_levels.html" class="log-sheet-link">Topping Levels DT/Counter</a></li>
+            <li><a href="cake_prices.html" class="log-sheet-link">Cake Prices Info</a></li>
+            <li><a href="cake_novelty_levels.html" class="log-sheet-link">Cake & Novelty Levels</a></li>
+            <li><a href="staff_post.html" class="log-sheet-link">General Post to Staff</a></li>
+            <li><a href="customer_post.html" class="log-sheet-link">General Post to Customers</a></li>
+            <li><a href="daily_jobs.html" class="log-sheet-link">Daily Jobs Sheet</a></li>
+            <li><a href="maintenance_log.html" class="log-sheet-link">Maintenance Log Sheet</a></li>
+            <li><a href="counting_sheet_cakes_and_novelties.html" class="log-sheet-link">Counting Sheet: Cakes & Novelties</a></li>
+            <li><a href="counting_sheet_kitchen.html" class="log-sheet-link">Counting Sheet: Kitchen</a></li>
+            <li><a href="saputo.html" class="log-sheet-link">Saputo Order Guide</a></li>
+            <li><a href="drive_thru_times.html" class="log-sheet-link">Drive Thru Times <i>Daily</i></a></li>
+            <li><a href="drive_thru_times_weekly.html" class="log-sheet-link">Drive Thru Times <i>Weekly</i></a></li>
+            <li><a href="temperature_log.html" class="log-sheet-link">Temperature Log</a></li>
+            <!-- Add more links as needed -->
+        </ul>
+    </section>
+</main>
 
 <footer>
-    <p>Dairy Queen Courtenay</p>
+    <p>&copy; 2023 Dairy Queen Courtenay</p>
 </footer>
 
 </body>
