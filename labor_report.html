@@ -6,45 +6,159 @@
         /* Basic styling */
         body {
             font-family: Arial, sans-serif;
+            font-size: 10px; /* Overall font size */
+            margin: 10mm 30mm; /* 10mm top/bottom, 30mm left/right */
+        }
+        /* Center-align the main title */
+        h1 {
+            text-align: center;
         }
         #report-table {
-            border-collapse: collapse;
-            width: 100%;
-            font-size: 12px; /* Smaller font for condensing */
+            border-collapse: collapse; /* Ensure borders are collapsed */
+            width: 85%; /* Reduced table width to accommodate increased margins */
+            margin: 0 auto; /* Center the table */
+            font-size: 9px; /* Smaller font for condensing */
+            table-layout: fixed; /* Fixed table layout */
         }
-        #report-table th, #report-table td {
-            border: 1px solid #ddd;
-            padding: 4px; /* Reduced padding */
-        }
+        /* Default header alignment and border */
         #report-table th {
-            background-color: #f2f2f2;
             text-align: left;
+            border: 1px solid #000; /* Black borders for headers */
+        }
+        /* Right-align the Date header */
+        #report-table th.date-header {
+            text-align: right;
+        }
+        /* Center-align the Hours Worked header */
+        #report-table th.hours-header {
+            text-align: center;
+        }
+        /* Define borders for table data cells */
+        #report-table td {
+            border: 1px solid #000; /* Black borders for cells */
+            padding: 2px; /* Reduced padding */
+            word-wrap: break-word; /* Allow text to wrap */
+        }
+        /* Right-align the Date cells */
+        #report-table td.date-cell {
+            text-align: right;
+        }
+        /* Center-align the Hours Worked cells */
+        #report-table td.hours-cell {
+            text-align: center;
         }
         #controls {
-            margin-bottom: 20px;
+            margin-bottom: 10px; /* Reduced margin */
         }
         @media print {
-            #controls {
+            #controls, #print-button {
                 display: none;
             }
-            #print-button {
-                display: none;
+            @page {
+                margin: 15mm 30mm; /* 15mm top/bottom, 30mm left/right */
+            }
+            body {
+                font-size: 9px; /* Even smaller font when printing */
+            }
+            #report-table {
+                font-size: 8px;
+                width: 85%; /* Ensure table width matches non-print styles */
+            }
+            /* Ensure employee data stays on the same page */
+            .employee-section {
+                page-break-inside: avoid;
             }
         }
         #print-button {
-            margin-bottom: 10px;
+            margin-bottom: 5px; /* Reduced margin */
+        }
+        /* Tooltip styles */
+        #info-icon {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+        #info-icon .tooltiptext {
+            visibility: hidden;
+            width: 200px;
+            background-color: #fff;
+            color: #000;
+            text-align: left;
+            padding: 5px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Position above the icon */
+            left: 50%;
+            margin-left: -100px; /* Center the tooltip */
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 10px;
+        }
+        #info-icon:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 10; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+        }
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto; /* Centered */
+            padding: 20px;
+            border: 1px solid #000;
+            width: 80%; /* Adjust as needed */
+            font-size: 12px;
+        }
+        .close-button {
+            color: #000;
+            float: right;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            text-decoration: none;
         }
     </style>
 </head>
 <body>
     <h1>Employee Timecard Report</h1>
     <div id="controls">
-        <label for="csv-file">Upload CSV File:</label><br>
-        <input type="file" id="csv-file" accept=".csv"><br><br>
+        <label for="csv-file">Upload CSV File:</label>
+        <span id="info-icon">Help
+            <div class="tooltiptext">Click for instructions on obtaining the CSV file.</div>
+        </span><br>
+        <input type="file" id="csv-file" accept=".csv, text/csv, application/vnd.ms-excel"><br><br>
     </div>
     <button id="print-button">Print Report</button>
     <div id="report">
         <!-- Report table will be inserted here -->
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <p>1) Go to <a href="https://admin7.brinkpos.net/Reports/Report/EmployeeTimecard/" target="_blank">Brink</a></p>
+            <p>2) Adjust date choices at top</p>
+            <p>3) Click 'View Report'</p>
+            <p>4) Change filetype from 'PDF' to 'CSV'</p>
+            <p>5) Click Save Button</p>
+        </div>
     </div>
 
     <script>
@@ -81,7 +195,7 @@
 
             for (let i = 0; i < lines.length; i++) {
                 let line = lines[i].trim();
-                if (line.startsWith('Employe Name')) {
+                if (line.startsWith('Employe Name') || line.startsWith('Employee Name')) {
                     state = 'newEmployee';
                     currentEmployee = {};
                 } else if (state === 'newEmployee') {
@@ -101,7 +215,7 @@
                         currentEmployee = null;
                     } else if (line.startsWith('Date') || line.startsWith('Date,,Job')) {
                         // Header line that may contain field indices
-                        // Let's find the index for 'Job' field
+                        // Let's find the index for fields
                         let headers = parseCSVLine(line);
                         currentEmployee.fieldIndices = {
                             Date: headers.indexOf('Date'),
@@ -188,7 +302,7 @@
 
         function isValidDateStr(str) {
             // Matches dates like MM/DD/YY, MM/DD/YYYY, MM/DD/YYYY HH:MM AM/PM
-            return /^\d{2}\/\d{2}\/\d{2,4}( \d{1,2}:\d{2} [AP]M)?$/.test(str);
+            return /^\d{1,2}\/\d{1,2}\/\d{2,4}( \d{1,2}:\d{2} [AP]M)?$/.test(str);
         }
 
         function parseDate(str) {
@@ -237,73 +351,128 @@
             let dateRangeHeader = document.createElement('h2');
             let options = { year: 'numeric', month: 'long', day: 'numeric' };
             dateRangeHeader.innerText = `Report Date Range: ${minDate.toLocaleDateString(undefined, options)} - ${maxDate.toLocaleDateString(undefined, options)}`;
+            dateRangeHeader.style.textAlign = 'center';
             reportDiv.appendChild(dateRangeHeader);
 
-            let table = document.createElement('table');
-            table.id = 'report-table';
-
-            // Create table header
-            let thead = document.createElement('thead');
-            let headerRow = document.createElement('tr');
-            let headers = ['Employee Name', 'Date', 'Position', 'Hours Worked'];
-            for (let headerText of headers) {
-                let th = document.createElement('th');
-                th.innerText = headerText;
-                headerRow.appendChild(th);
-            }
-            thead.appendChild(headerRow);
-            table.appendChild(thead);
-
-            // Create table body
-            let tbody = document.createElement('tbody');
             for (let emp of reportData) {
-                // Employee name row
-                let nameRow = document.createElement('tr');
-                let nameCell = document.createElement('td');
-                nameCell.innerText = emp.name;
-                nameCell.style.fontWeight = 'bold';
-                nameCell.colSpan = 4;
-                nameRow.appendChild(nameCell);
-                tbody.appendChild(nameRow);
+                // Employee section container
+                let empSection = document.createElement('div');
+                empSection.className = 'employee-section';
 
-                // Shift records
+                // Employee name header
+                let empHeader = document.createElement('h3');
+                empHeader.innerText = emp.name;
+                empHeader.style.textAlign = 'center'; // Center the employee name
+                empSection.appendChild(empHeader);
+
+                let table = document.createElement('table');
+                table.id = 'report-table';
+
+                // Create colgroup for column widths
+                let colgroup = document.createElement('colgroup');
+
+                let colDate = document.createElement('col');
+                colDate.style.width = '42.5%'; /* Adjusted for symmetry */
+                colgroup.appendChild(colDate);
+
+                let colHours = document.createElement('col');
+                colHours.style.width = '15%';
+                colgroup.appendChild(colHours);
+
+                let colPosition = document.createElement('col');
+                colPosition.style.width = '42.5%'; /* Adjusted for symmetry */
+                colgroup.appendChild(colPosition);
+
+                table.appendChild(colgroup);
+
+                // Create table header
+                let thead = document.createElement('thead');
+                let headerRow = document.createElement('tr');
+                let headers = ['Date', 'Hours Worked', 'Position'];
+                for (let headerText of headers) {
+                    let th = document.createElement('th');
+                    th.innerText = headerText;
+                    if (headerText === 'Date') {
+                        th.classList.add('date-header'); // Add class for right alignment
+                    }
+                    if (headerText === 'Hours Worked') {
+                        th.classList.add('hours-header'); // Add class for center alignment
+                    }
+                    headerRow.appendChild(th);
+                }
+                thead.appendChild(headerRow);
+                table.appendChild(thead);
+
+                // Create table body
+                let tbody = document.createElement('tbody');
+
                 for (let rec of emp.records) {
                     let row = document.createElement('tr');
-                    let nameCell = document.createElement('td');
-                    nameCell.innerText = ''; // Empty cell for alignment
                     let dateCell = document.createElement('td');
                     dateCell.innerText = rec.dateStr;
+                    dateCell.classList.add('date-cell'); // Add class for right alignment
+
+                    let hoursCell = document.createElement('td');
+                    hoursCell.innerText = rec.totalHours.toFixed(2);
+                    hoursCell.classList.add('hours-cell'); // Add class for center alignment
+
                     let positionCell = document.createElement('td');
                     positionCell.innerText = rec.position;
                     positionCell.style.fontStyle = 'italic';
-                    let hoursCell = document.createElement('td');
-                    hoursCell.innerText = rec.totalHours.toFixed(2);
-                    row.appendChild(nameCell);
+
                     row.appendChild(dateCell);
-                    row.appendChild(positionCell);
                     row.appendChild(hoursCell);
+                    row.appendChild(positionCell);
                     tbody.appendChild(row);
                 }
                 // Total hours row
                 let totalRow = document.createElement('tr');
-                let labelCell = document.createElement('td');
-                labelCell.innerText = ''; // Empty cell for alignment
+                
                 let totalLabelCell = document.createElement('td');
                 totalLabelCell.innerText = 'Total Hours';
                 totalLabelCell.style.fontWeight = 'bold';
-                totalLabelCell.colSpan = 2;
+                totalLabelCell.classList.add('date-cell'); // Right-align under 'Date'
+
                 let totalHoursCell = document.createElement('td');
                 totalHoursCell.innerText = emp.totalHours;
                 totalHoursCell.style.fontWeight = 'bold';
-                totalRow.appendChild(labelCell);
+                totalHoursCell.classList.add('hours-cell'); // Center-align under 'Hours Worked'
+
+                let spacerCell = document.createElement('td');
+                spacerCell.innerText = ''; // Empty cell under 'Position'
+
                 totalRow.appendChild(totalLabelCell);
                 totalRow.appendChild(totalHoursCell);
+                totalRow.appendChild(spacerCell);
                 tbody.appendChild(totalRow);
-            }
-            table.appendChild(tbody);
 
-            reportDiv.appendChild(table);
+                table.appendChild(tbody);
+
+                empSection.appendChild(table);
+
+                reportDiv.appendChild(empSection);
+            }
         }
+
+        // Modal functionality
+        var modal = document.getElementById('modal');
+        var infoIcon = document.getElementById('info-icon');
+        var closeButton = document.getElementsByClassName('close-button')[0];
+
+        infoIcon.addEventListener('click', function() {
+            modal.style.display = 'block';
+        });
+
+        closeButton.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+
+        // When the user clicks anywhere outside of the modal, close it
+        window.addEventListener('click', function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        });
     </script>
 </body>
 </html>
