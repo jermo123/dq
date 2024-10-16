@@ -483,6 +483,8 @@
                                     <li><a href="https://docs.google.com/spreadsheets/d/1TVc3wMJIMskp6LF2TVKo6yyPltUg7bo4GjFkc-oj0RA/edit?usp=sharing" target="_blank" title="">Preorder Tracker</a></li>
                                     <li><a href="logsheet.html" target="_blank" title="">Log Sheet Hub</a></li>
                                     <li><a href="labor_report.html" target="_blank" title="">Labor Report</a></li>
+                                    <li><a href="laborv2.html" target="_blank" title="">Labor Report Version 2</a></li>
+
 
             </ul>
         </div>
@@ -841,7 +843,7 @@ function isNthDayOfMonth(date, nth, dayOfWeek) {
 function displayReminders() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const daysAhead = 14; // Show reminders for the next 14 days
+    const daysAhead = 7; // Show reminders for the next 14 days
     const reminderList = document.getElementById('reminderList');
     reminderList.innerHTML = '';
 
@@ -874,7 +876,7 @@ function displayReminders() {
         let isToday = item.date.getTime() === today.getTime();
 
         // Add a star if the reminder is today
-        let star = isToday ? ' ★' : '';
+        let star = isToday ? ' ★Today★' : '';
 
         li.innerHTML = '<strong>' + item.reminder.title + '</strong>' + star + ' (' + dateString + '): ' + item.reminder.description;
         reminderList.appendChild(li);
