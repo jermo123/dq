@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CVDQ Manager - Email Templates</title>
+    
+    <!-- Fonts and Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Nunito', sans-serif;
+            background-color: #f8f9fc;
+        }
+        /* Content Styles */
+        #content-wrapper {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        /* Topbar Styles */
+        .topbar {
+            background-color: #fff;
+            padding: 1rem;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        /* Main Content */
+        .container-fluid {
+            padding: 2rem;
+            flex: 1;
+            overflow-y: auto;
+        }
+        /* Card Styles */
+        .card {
+            border: none;
+            border-radius: 0.5rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        .card-header {
+            background-color: #4e73df;
+            color: #fff;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        /* Footer Styles */
+        .footer {
+            background-color: #f1f1f1;
+            text-align: center;
+            padding: 1rem;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        /* Template Options Styles */
+        .template-options {
+            display: none;
+            margin-top: 10px;
+        }
+    </style>
+    
+    <!-- Bootstrap 5 JS and Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Custom Scripts -->
+    <script>
+        // Open Folder Function (Requires Backend Support)
+        function openFolder(path) {
+            if (window.pywebview && window.pywebview.api) {
+                window.pywebview.api.open_folder(path);
+            } else {
+                alert('Folder access is not supported in this environment.');
+            }
+        }
+
+        // Open Window Function
+        function openWindow(url) {
+            const width = 1100;
+            const height = 800;
+            const left = (screen.width - width) / 2;
+            const top = (screen.height - height) / 2;
+            
+            window.open(url, 'popupWindow', `width=${width},height=${height},scrollbars=yes,menubar=no,toolbar=no,location=no,status=no,left=${left},top=${top}`);
+        }
+
+        // Update Date and Time
+        function updateDateTime() {
+            const now = new Date();
+            const options = {
+                weekday: 'long',
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            };
+            const formattedDateTime = now.toLocaleString('en-US', options);
+            document.getElementById('datetime').innerText = formattedDateTime;
+        }
+        setInterval(updateDateTime, 1000);
+        document.addEventListener('DOMContentLoaded', updateDateTime);
+    </script>
+</head>
+
+<body id="page-top">
+    <!-- Content Wrapper -->
+    <div id="content-wrapper" class="d-flex flex-column">
+        <!-- Main Content -->
+        <div id="content">
+            <!-- Topbar -->
+            <nav class="topbar">
+                <div id="datetime" class="fw-bold"></div>
+            </nav>
+            <!-- End of Topbar -->
+
+            <!-- Begin Page Content -->
+            <div class="container-fluid">
+                <h1 class="h3 mb-1 text-gray-800">Email Templates</h1>
+                
+                <!-- Template Selection -->
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-primary">
+                            <select id="template-select" class="form-select">
+                                <option value="" selected disabled>Select a template</option>
+                                <option value="template1">Coin Order - Driftwood</option>
+                                <option value="template6">Coin Order - Crown Isle</option>
+                                <option value="template2">GFS Special Order</option>
+                                <option value="template3">Order for Receipt Tape</option>
+                                <option value="template5">Other DQs</option>
+                            </select>
+                        </h6>
+                    </div>
+                    <div class="card-body">
+                        <!-- Template Options -->
+                        <div class="template-options" id="template1-options">
+                            <h2>Coin Order Email</h2>
+                            <form id="coinOrderForm">
+                                <div class="mb-3">
+                                    <label for="nickel" class="form-label">5¢ (Nickels)</label>
+                                    <input type="number" class="form-control" id="nickel" placeholder="Rolls of nickels needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dime" class="form-label">10¢ (Dimes)</label>
+                                    <input type="number" class="form-control" id="dime" placeholder="Rolls of dimes needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quarter" class="form-label">25¢ (Quarters)</label>
+                                    <input type="number" class="form-control" id="quarter" placeholder="Rolls of quarters needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loonie" class="form-label">$1 (Loonies)</label>
+                                    <input type="number" class="form-control" id="loonie" placeholder="Rolls of loonies needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="toonie" class="form-label">$2 (Toonies)</label>
+                                    <input type="number" class="form-control" id="toonie" placeholder="Rolls of toonies needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sender-name" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="sender-name" placeholder="Enter your name">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="generateCoinEmail()">Generate Email</button>
+                            </form>
+                        </div>
+
+                        <div class="template-options" id="template6-options">
+                            <h2>Coin Order Email - Crown Isle</h2>
+                            <form id="coinOrderForm6">
+                                <div class="mb-3">
+                                    <label for="nickel6" class="form-label">5¢ (Nickels)</label>
+                                    <input type="number" class="form-control" id="nickel6" placeholder="Rolls of nickels needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="dime6" class="form-label">10¢ (Dimes)</label>
+                                    <input type="number" class="form-control" id="dime6" placeholder="Rolls of dimes needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="quarter6" class="form-label">25¢ (Quarters)</label>
+                                    <input type="number" class="form-control" id="quarter6" placeholder="Rolls of quarters needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="loonie6" class="form-label">$1 (Loonies)</label>
+                                    <input type="number" class="form-control" id="loonie6" placeholder="Rolls of loonies needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="toonie6" class="form-label">$2 (Toonies)</label>
+                                    <input type="number" class="form-control" id="toonie6" placeholder="Rolls of toonies needed" min="0">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sender-name6" class="form-label">Your Name</label>
+                                    <input type="text" class="form-control" id="sender-name6" placeholder="Enter your name">
+                                </div>
+                                <button type="button" class="btn btn-primary" onclick="generateCoinEmail6()">Generate Email</button>
+                            </form>
+                        </div>
+
+                        <div class="template-options" id="template2-options">
+                            <h2>GFS Special Order Email</h2>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="item2" class="form-label">Item Number:</label>
+                                    <input type="text" class="form-control" id="item2" placeholder="ex. 102492">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="descrip2" class="form-label">Description of Item:</label>
+                                    <input type="text" class="form-control" id="descrip2" placeholder="ex. wooden forks">
+                                </div>
+                                <div class="mb-3">
+                                    <label for="sender-name2" class="form-label">Your Name:</label>
+                                    <input type="text" class="form-control" id="sender-name2" placeholder="Enter your name">
+                                </div>
+                                <!-- Add more options as needed -->
+                                <button type="button" class="btn btn-primary" onclick="generateEmail2('template2')">Generate Email</button>
+                            </form>
+                        </div>
+
+                        <div class="template-options" id="template3-options">
+                            <h2>Receipt Tape Order Email</h2>
+                            <form>
+                                <div class="mb-3">
+                                    <label for="sender-name3" class="form-label">Your Name:</label>
+                                    <input type="text" class="form-control" id="sender-name3" placeholder="Enter your name">
+                                </div>
+                                <p><a href="receipttape.msg" class="btn btn-secondary" download>Download Receipt Tape Order (10 Boxes)</a></p>
+                            </form>
+                        </div>
+
+                        <div class="template-options" id="template5-options">
+                            <h2>Contact Other DQs</h2>
+                            <form id="checkboxForm">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="option" value="Geff Freeland" id="option1">
+                                    <label class="form-check-label" for="option1">Geff Freeland</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="option" value="Melanie Hammond" id="option2">
+                                    <label class="form-check-label" for="option2">Melanie Hammond</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="option" value="Campbell River DQ" id="option3">
+                                    <label class="form-check-label" for="option3">Campbell River DQ</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="option" value="Travis Berthiaume" id="option4">
+                                    <label class="form-check-label" for="option4">Travis Berthiaume</label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" name="option" value="Millstream DQ" id="option5">
+                                    <label class="form-check-label" for="option5">Millstream DQ</label>
+                                </div>
+                                <button type="button" class="btn btn-primary mt-3" onclick="generateEmailx('template5')">Generate Email</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Email Output Section (Optional) -->
+                <div id="email-output">
+                    <h2>&nbsp;</h2>
+                    <pre id="email-content"></pre>
+                </div>
+
+                <hr>
+                <br>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+                <p>&nbsp;</p>
+            </div>
+            <!-- /.container-fluid -->
+        </div>
+        <!-- End of Main Content -->
+
+        <!-- Footer -->
+        <footer class="footer">
+            &copy; 2024 Dairy Queen Courtenay Manager's Dashboard. All rights reserved.
+        </footer>
+        <!-- End of Footer -->
+    </div>
+    <!-- End of Content Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Bootstrap 5 JS Bundle already included above -->
+
+    <!-- Custom Scripts -->
+    <script>
+        // Template Selection Script
+        document.getElementById('template-select').addEventListener('change', function() {
+            const selectedTemplate = this.value;
+            document.querySelectorAll('.template-options').forEach(el => el.style.display = 'none');
+            if (selectedTemplate) {
+                document.getElementById(`${selectedTemplate}-options`).style.display = 'block';
+            }
+        });
+
+        // Generate Email Functions
+        function generateCoinEmail() {
+            const nickel = parseInt(document.getElementById('nickel').value) || 0;
+            const dime = parseInt(document.getElementById('dime').value) || 0;
+            const quarter = parseInt(document.getElementById('quarter').value) || 0;
+            const loonie = parseInt(document.getElementById('loonie').value) || 0;
+            const toonie = parseInt(document.getElementById('toonie').value) || 0;
+            const senderName = document.getElementById('sender-name').value.trim();
+
+            const nickelTotal = nickel * 2;
+            const dimeTotal = dime * 5;
+            const quarterTotal = quarter * 10;
+            const loonieTotal = loonie * 25;
+            const toonieTotal = toonie * 50;
+            const grandTotal = nickelTotal + dimeTotal + quarterTotal + loonieTotal + toonieTotal;
+
+            const currentDate = new Date().toLocaleDateString();
+
+            // Helper function to format the rows
+            function formatRow(coin, rolls, total) {
+                const coinLength = 25; // Increased for better spacing
+                const rollsLength = 20;
+                const totalLength = 20;
+                const formattedCoin = coin.padEnd(coinLength);
+                const formattedRolls = rolls.toString().padEnd(rollsLength);
+                const formattedTotal = `$${total.toFixed(2)}`.padStart(totalLength);
+                return `${formattedCoin}${formattedRolls}${formattedTotal}`;
+            }
+
+            const emailBody = `
+Date: ${currentDate}
+
+Hey there,
+
+I would like to request the following coin rolls:
+
+Coin                     | Rolls Needed        | Total Amount ($)
+---------------------------------------------------------------
+${formatRow('5¢ (Nickels)', nickel, nickelTotal)}
+---------------------------------------------------------------
+${formatRow('10¢ (Dimes)', dime, dimeTotal)}
+---------------------------------------------------------------
+${formatRow('25¢ (Quarters)', quarter, quarterTotal)}
+---------------------------------------------------------------
+${formatRow('$1 (Loonies)', loonie, loonieTotal)}
+---------------------------------------------------------------
+${formatRow('$2 (Toonies)', toonie, toonieTotal)}
+
+Grand Total:                    $${grandTotal.toFixed(2)}
+
+Thank you,
+
+${senderName}
+        `;
+
+            const subject = 'Coin Order Request';
+            const recipients = 'mailbox.b04940@cibc.com, paul.kim@cibc.com, chhaya.kumari@cibc.com'; // List of recipients
+            const mailtoLink = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+
+            window.location.href = mailtoLink;
+        }
+
+        function generateCoinEmail6() {
+            const nickel = parseInt(document.getElementById('nickel6').value) || 0;
+            const dime = parseInt(document.getElementById('dime6').value) || 0;
+            const quarter = parseInt(document.getElementById('quarter6').value) || 0;
+            const loonie = parseInt(document.getElementById('loonie6').value) || 0;
+            const toonie = parseInt(document.getElementById('toonie6').value) || 0;
+            const senderName = document.getElementById('sender-name6').value.trim();
+
+            const nickelTotal = nickel * 2;
+            const dimeTotal = dime * 5;
+            const quarterTotal = quarter * 10;
+            const loonieTotal = loonie * 25;
+            const toonieTotal = toonie * 50;
+            const grandTotal = nickelTotal + dimeTotal + quarterTotal + loonieTotal + toonieTotal;
+
+            const currentDate = new Date().toLocaleDateString();
+
+            // Helper function to format the rows
+            function formatRow(coin, rolls, total) {
+                const coinLength = 25; // Increased for better spacing
+                const rollsLength = 20;
+                const totalLength = 20;
+                const formattedCoin = coin.padEnd(coinLength);
+                const formattedRolls = rolls.toString().padEnd(rollsLength);
+                const formattedTotal = `$${total.toFixed(2)}`.padStart(totalLength);
+                return `${formattedCoin}${formattedRolls}${formattedTotal}`;
+            }
+
+            const emailBody = `
+Date: ${currentDate}
+
+Hey there,
+
+I would like to request the following coin rolls:
+
+Coin                     | Rolls Needed        | Total Amount ($)
+---------------------------------------------------------------
+${formatRow('5¢ (Nickels)', nickel, nickelTotal)}
+---------------------------------------------------------------
+${formatRow('10¢ (Dimes)', dime, dimeTotal)}
+---------------------------------------------------------------
+${formatRow('25¢ (Quarters)', quarter, quarterTotal)}
+---------------------------------------------------------------
+${formatRow('$1 (Loonies)', loonie, loonieTotal)}
+---------------------------------------------------------------
+${formatRow('$2 (Toonies)', toonie, toonieTotal)}
+
+Grand Total:                    $${grandTotal.toFixed(2)}
+
+Thank you,
+
+Dairy Queen Courtenay
+
+${senderName}
+        `;
+
+            const subject = 'Coin Order Request';
+            const recipients = 'Malaimagal.Sritharan@cibc.com, Jody.MacFarlane@cibc.com'; // List of recipients
+            const mailtoLink = `mailto:${recipients}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(emailBody)}`;
+
+            window.location.href = mailtoLink;
+        }
+
+        function generateEmail2(templateId) {
+            if (templateId === 'template2') {
+                // Get the input values
+                const itemNumber = document.getElementById('item2').value.trim();
+                const description = document.getElementById('descrip2').value.trim();
+                const senderName = document.getElementById('sender-name2').value.trim();
+
+                if (!itemNumber || !description || !senderName) {
+                    alert('Please fill in all fields.');
+                    return;
+                }
+
+                // Construct the email components
+                const emailTo = 'monika.schembri@gfs.com';  // Replace with the actual email
+                const subject = 'Special Order Request';
+                const body = `Hello,\n\nI would like to place a special order for the following item:\n\nItem Number: ${itemNumber}\nDescription: ${description}\n\nBest regards,\n${senderName}\n\nCustomer number 1903000`;
+
+                // Create the mailto link and open it
+                const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoLink;
+            }
+        }
+
+        function generateEmailx(templateId) {
+            if (templateId === 'template5') {
+                // Define the email addresses for each option
+                const emailAddresses = {
+                    'Geff Freeland': 'dairyqueen@me.com',
+                    'Melanie Hammond': 'mahammonddq@gmail.com',
+                    'Campbell River DQ': 'campbellriverdq@gmail.com',
+                    'Travis Berthiaume': 'travisberthiaume@gmail.com',
+                    'Millstream DQ': 'dq.millstream@gmail.com',
+                };
+
+                // Get the form and checkboxes
+                const form = document.getElementById('checkboxForm');
+                const checkboxes = form.querySelectorAll('input[type="checkbox"]:checked');
+
+                // Collect the selected email addresses
+                let recipients = [];
+                checkboxes.forEach(checkbox => {
+                    const label = checkbox.value;
+                    if (emailAddresses[label]) {
+                        recipients.push(emailAddresses[label]);
+                    }
+                });
+
+                if (recipients.length === 0) {
+                    alert('Please select at least one contact.');
+                    return;
+                }
+
+                // Construct the email components
+                const emailTo = recipients.join(','); // Join recipients with commas
+                const subject = 'Contacting DQs';
+                const body = 'Hello,\n\nBest regards,\n[Your Name]';
+
+                // Create the mailto link and open it
+                const mailtoLink = `mailto:${emailTo}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+                window.location.href = mailtoLink;
+            }
+        }
+    </script>
+</body>
+
+</html>
