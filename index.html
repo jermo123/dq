@@ -843,7 +843,7 @@ function isNthDayOfMonth(date, nth, dayOfWeek) {
 function displayReminders() {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
-    const daysAhead = 7; // Show reminders for the next 14 days
+    const daysAhead = 14; // Show reminders for the next 14 days
     const reminderList = document.getElementById('reminderList');
     reminderList.innerHTML = '';
 

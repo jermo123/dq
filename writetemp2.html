@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Dairy Queen Courtenay - Employee Counseling Portal</title>
+    <!-- Responsive Meta Tag -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Styles -->
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f7f7f7;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #d71e0a;
+        }
+
+        .navbar-brand {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .navbar-brand:hover {
+            color: #f1f1f1;
+        }
+
+        .container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #d71e0a;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            margin-bottom: 20px;
+        }
+
+        .btn-primary {
+            background-color: #d71e0a;
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background-color: #b81a09;
+        }
+
+        footer {
+            background-color: #f1f1f1;
+            padding: 15px;
+            text-align: center;
+            color: #666;
+        }
+
+        /* Modal Styles */
+        pre {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        /* Template Options Styles */
+        .template-options {
+            display: none;
+        }
+    </style>
+
+    <!-- Bootstrap 5.3 JS and Dependencies -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Update Date and Time
+            function updateDateTime() {
+                const now = new Date();
+                const options = {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                };
+                const formattedDateTime = now.toLocaleString('en-US', options);
+                document.getElementById('datetime').innerText = formattedDateTime;
+            }
+            updateDateTime();
+            setInterval(updateDateTime, 60000);
+
+            // Template Selection Script
+            document.getElementById('template-select').addEventListener('change', function () {
+                const selectedTemplate = this.value;
+                document.querySelectorAll('.template-options').forEach(el => el.style.display = 'none');
+                if (selectedTemplate) {
+                    document.getElementById(`${selectedTemplate}-options`).style.display = 'block';
+                    document.getElementById('template-form').scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+
+            // Generate Letter Function
+            window.generateLetter = function (templateId) {
+                let content = '';
+
+                switch (templateId) {
+                    case 'attendance':
+                        content = generateAttendanceTemplate();
+                        break;
+                    case 'performance':
+                        content = generatePerformanceTemplate();
+                        break;
+                    case 'conduct':
+                        content = generateConductTemplate();
+                        break;
+                    case 'recognition':
+                        content = generateRecognitionTemplate();
+                        break;
+                    case 'custom':
+                        content = generateCustomTemplate();
+                        break;
+                    default:
+                        content = 'Invalid template selected.';
+                }
+
+                if (content !== '') {
+                    document.getElementById('letterContent').innerText = content;
+                    const letterModal = new bootstrap.Modal(document.getElementById('letterModal'));
+                    letterModal.show();
+                }
+            };
+
+            // Template Generators
+            function generateAttendanceTemplate() {
+                const name = document.getElementById('employee-name-attendance').value.trim();
+                const date = document.getElementById('date-attendance').value;
+                const absences = document.getElementById('absences-attendance').value.trim();
+                const reasons = document.getElementById('reasons-attendance').value.trim();
+
+                if (!name || !date || !absences || !reasons) {
+                    alert('Please fill in all fields.');
+                    return '';
+                }
+
+                return `Date: ${date}
+
+To: ${name}
+
+Subject: Attendance Discussion
+
+Dear ${name},
+
+I wanted to take a moment to discuss your attendance over the past few weeks. It has come to my attention that you have been absent on the following occasions: ${absences}.
+
+I understand that unforeseen circumstances can arise. However, consistent attendance is crucial for our team's success. I would like to know if there are any underlying issues or if there's anything we can assist you with.
+
+Please let me know how we can support you in improving your attendance.
+
+Best regards,
+[Your Name]
+Manager, Dairy Queen Courtenay`;
+            }
+
+            function generatePerformanceTemplate() {
+                const name = document.getElementById('employee-name-performance').value.trim();
+                const date = document.getElementById('date-performance').value;
+                const areas = document.getElementById('areas-performance').value.trim();
+                const improvement = document.getElementById('improvement-performance').value.trim();
+
+                if (!name || !date || !areas || !improvement) {
+                    alert('Please fill in all fields.');
+                    return '';
+                }
+
+                return `Date: ${date}
+
+To: ${name}
+
+Subject: Performance Improvement Plan
+
+Dear ${name},
+
+Over recent evaluations, we've noticed some areas where your performance could be improved, specifically ${areas}.
+
+We value your contributions and believe that with some targeted support, you can excel in your role. I'd like to set up a meeting to discuss a performance improvement plan, including ${improvement}.
+
+Please let me know a convenient time for you.
+
+Sincerely,
+[Your Name]
+Manager, Dairy Queen Courtenay`;
+            }
+
+            function generateConductTemplate() {
+                const name = document.getElementById('employee-name-conduct').value.trim();
+                const date = document.getElementById('date-conduct').value;
+                const incident = document.getElementById('incident-conduct').value.trim();
+                const policy = document.getElementById('policy-conduct').value.trim();
+
+                if (!name || !date || !incident || !policy) {
+                    alert('Please fill in all fields.');
+                    return '';
+                }
+
+                return `Date: ${date}
+
+To: ${name}
+
+Subject: Conduct Notice
+
+Dear ${name},
+
+On ${date}, it was reported that ${incident}. This behavior is not in line with our company's ${policy} policy.
+
+We take such matters seriously to maintain a positive work environment for all. I'd like to discuss this with you further to understand what happened and how we can prevent future occurrences.
+
+Please arrange a meeting with me at your earliest convenience.
+
+Regards,
+[Your Name]
+Manager, Dairy Queen Courtenay`;
+            }
+
+            function generateRecognitionTemplate() {
+                const name = document.getElementById('employee-name-recognition').value.trim();
+                const date = document.getElementById('date-recognition').value;
+                const achievement = document.getElementById('achievement-recognition').value.trim();
+
+                if (!name || !date || !achievement) {
+                    alert('Please fill in all fields.');
+                    return '';
+                }
+
+                return `Date: ${date}
+
+To: ${name}
+
+Subject: Outstanding Performance Recognition
+
+Dear ${name},
+
+I wanted to personally acknowledge your exceptional work on ${achievement}. Your dedication and hard work have not gone unnoticed.
+
+Thank you for being a valuable member of our team. Keep up the great work!
+
+Warm regards,
+[Your Name]
+Manager, Dairy Queen Courtenay`;
+            }
+
+            function generateCustomTemplate() {
+                const name = document.getElementById('employee-name-custom').value.trim();
+                const date = document.getElementById('date-custom').value;
+                const subject = document.getElementById('subject-custom').value.trim();
+                const message = document.getElementById('message-custom').value.trim();
+
+                if (!name || !date || !subject || !message) {
+                    alert('Please fill in all fields.');
+                    return '';
+                }
+
+                return `Date: ${date}
+
+To: ${name}
+
+Subject: ${subject}
+
+Dear ${name},
+
+${message}
+
+Best regards,
+[Your Name]
+Manager, Dairy Queen Courtenay`;
+            }
+
+            // Download Letter as Text File
+            window.downloadLetter = function () {
+                const content = document.getElementById('letterContent').innerText;
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'EmployeeLetter.txt';
+                a.click();
+                URL.revokeObjectURL(url);
+            };
+
+            // Copy Letter to Clipboard
+            window.copyLetter = function () {
+                const content = document.getElementById('letterContent').innerText;
+                navigator.clipboard.writeText(content).then(() => {
+                    alert('Letter copied to clipboard!');
+                }).catch(err => {
+                    alert('Failed to copy the letter.');
+                    console.error('Error copying text: ', err);
+                });
+            };
+        });
+    </script>
+</head>
+
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <div class="container">
+            <a class="navbar-brand" href="#">DQ Courtenay - Employee Counseling Portal</a>
+            <span class="navbar-text ms-auto text-white" id="datetime"></span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <h1 class="text-center">Employee Counseling Tool</h1>
+
+        <!-- Template Selection Card -->
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Select a Template</h5>
+            </div>
+            <div class="card-body">
+                <!-- Template Selection Dropdown -->
+                <div class="mb-4">
+                    <select id="template-select" class="form-select">
+                        <option value="" selected disabled>Select a template</option>
+                        <option value="attendance">Attendance Discussion</option>
+                        <option value="performance">Performance Improvement</option>
+                        <option value="conduct">Conduct Notice</option>
+                        <option value="recognition">Recognition Letter</option>
+                        <option value="custom">Custom Message</option>
+                    </select>
+                </div>
+
+                <!-- Template Forms -->
+                <div id="template-form">
+                    <!-- Attendance Template -->
+                    <div class="template-options" id="attendance-options">
+                        <h4>Attendance Discussion</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="employee-name-attendance" class="form-label">Employee Name:</label>
+                                <input type="text" id="employee-name-attendance" class="form-control" placeholder="Enter employee's name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date-attendance" class="form-label">Date:</label>
+                                <input type="date" id="date-attendance" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="absences-attendance" class="form-label">Dates of Absences:</label>
+                                <input type="text" id="absences-attendance" class="form-control" placeholder="e.g., July 5, July 12, July 19">
+                            </div>
+                            <div class="mb-3">
+                                <label for="reasons-attendance" class="form-label">Reason for Absences (if known):</label>
+                                <input type="text" id="reasons-attendance" class="form-control" placeholder="Optional">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="generateLetter('attendance')">Generate Letter</button>
+                        </form>
+                    </div>
+
+                    <!-- Performance Improvement Template -->
+                    <div class="template-options" id="performance-options">
+                        <h4>Performance Improvement</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="employee-name-performance" class="form-label">Employee Name:</label>
+                                <input type="text" id="employee-name-performance" class="form-control" placeholder="Enter employee's name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date-performance" class="form-label">Date:</label>
+                                <input type="date" id="date-performance" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="areas-performance" class="form-label">Areas Needing Improvement:</label>
+                                <input type="text" id="areas-performance" class="form-control" placeholder="e.g., customer service, time management">
+                            </div>
+                            <div class="mb-3">
+                                <label for="improvement-performance" class="form-label">Improvement Actions:</label>
+                                <input type="text" id="improvement-performance" class="form-control" placeholder="e.g., training sessions, mentorship">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="generateLetter('performance')">Generate Letter</button>
+                        </form>
+                    </div>
+
+                    <!-- Conduct Notice Template -->
+                    <div class="template-options" id="conduct-options">
+                        <h4>Conduct Notice</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="employee-name-conduct" class="form-label">Employee Name:</label>
+                                <input type="text" id="employee-name-conduct" class="form-control" placeholder="Enter employee's name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date-conduct" class="form-label">Date of Incident:</label>
+                                <input type="date" id="date-conduct" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="incident-conduct" class="form-label">Description of Incident:</label>
+                                <textarea id="incident-conduct" class="form-control" rows="3" placeholder="Provide details of the incident"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label for="policy-conduct" class="form-label">Policy Violated:</label>
+                                <input type="text" id="policy-conduct" class="form-control" placeholder="e.g., Code of Conduct, Harassment Policy">
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="generateLetter('conduct')">Generate Letter</button>
+                        </form>
+                    </div>
+
+                    <!-- Recognition Letter Template -->
+                    <div class="template-options" id="recognition-options">
+                        <h4>Recognition Letter</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="employee-name-recognition" class="form-label">Employee Name:</label>
+                                <input type="text" id="employee-name-recognition" class="form-control" placeholder="Enter employee's name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date-recognition" class="form-label">Date:</label>
+                                <input type="date" id="date-recognition" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="achievement-recognition" class="form-label">Achievement:</label>
+                                <textarea id="achievement-recognition" class="form-control" rows="3" placeholder="Describe the employee's achievement"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="generateLetter('recognition')">Generate Letter</button>
+                        </form>
+                    </div>
+
+                    <!-- Custom Message Template -->
+                    <div class="template-options" id="custom-options">
+                        <h4>Custom Message</h4>
+                        <form>
+                            <div class="mb-3">
+                                <label for="employee-name-custom" class="form-label">Employee Name:</label>
+                                <input type="text" id="employee-name-custom" class="form-control" placeholder="Enter employee's name">
+                            </div>
+                            <div class="mb-3">
+                                <label for="date-custom" class="form-label">Date:</label>
+                                <input type="date" id="date-custom" class="form-control">
+                            </div>
+                            <div class="mb-3">
+                                <label for="subject-custom" class="form-label">Subject:</label>
+                                <input type="text" id="subject-custom" class="form-control" placeholder="Subject of the message">
+                            </div>
+                            <div class="mb-3">
+                                <label for="message-custom" class="form-label">Message:</label>
+                                <textarea id="message-custom" class="form-control" rows="5" placeholder="Type your custom message here"></textarea>
+                            </div>
+                            <button type="button" class="btn btn-primary" onclick="generateLetter('custom')">Generate Letter</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Displaying Generated Letter -->
+        <div class="modal fade" id="letterModal" tabindex="-1" aria-labelledby="letterModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="letterModalLabel">Generated Letter</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <pre id="letterContent"></pre>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-success" onclick="downloadLetter()">Download Letter</button>
+                        <button type="button" class="btn btn-outline-primary" onclick="copyLetter()">Copy to Clipboard</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        &copy; 2024 Dairy Queen Courtenay. All rights reserved.
+    </footer>
+</body>
+
+</html>

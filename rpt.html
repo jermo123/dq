@@ -258,39 +258,6 @@
                 keyValuePairs.push({ key: 'Mobile Total', value: '$' + mobileTotal.toFixed(2) });
             }
 
-            // **New Code Starts Here**
-            // Process 'Revenue Centers' section to compute 'Soft Serve + Novelties'
-            if (sections['Revenue Centers']) {
-                var revenueCentersSection = sections['Revenue Centers'];
-                var headers = revenueCentersSection[1];
-                var totalIndex = headers.indexOf('Total');
-                var softServeTotal = 0;
-                var noveltiesBoxedTotal = 0;
-
-                if (totalIndex !== -1) {
-                    revenueCentersSection.slice(2).forEach(function(row) {
-                        var centerName = row[0];
-                        var totalCell = row[totalIndex];
-                        if (totalCell) {
-                            // Remove commas and dollar signs, convert to number
-                            var totalValue = parseFloat(totalCell.replace(/[^0-9.-]+/g,""));
-                            if (!isNaN(totalValue)) {
-                                if (centerName === 'Soft Serve') {
-                                    softServeTotal += totalValue;
-                                }
-                                if (centerName === 'Novelties-Boxed') {
-                                    noveltiesBoxedTotal += totalValue;
-                                }
-                            }
-                        }
-                    });
-                }
-
-                var softServeNoveltiesTotal = softServeTotal + noveltiesBoxedTotal;
-                keyValuePairs.push({ key: 'Soft Serve + Novelties', value: '$' + softServeNoveltiesTotal.toFixed(2) });
-            }
-            // **New Code Ends Here**
-
             // Create table with four columns
             var numColumns = 4;
             var table = document.createElement('table');
@@ -362,9 +329,26 @@
 
                     var tbody = document.createElement('tbody');
 
+                    var softServeTotal = 0;
+                    var noveltiesBoxedTotal = 0;
+                    var softServeRow = null;
+                    var noveltiesRow = null;
+
                     // Process data rows, rearranging and excluding columns
                     sectionRows.slice(2).forEach(function(row) {
                         var tr = document.createElement('tr');
+                        var centerName = row[0];
+
+                        // Check if this row is 'Soft Serve' or 'Novelties-Boxed'
+                        if (sectionName === 'Revenue Centers') {
+                            if (centerName === 'Soft Serve') {
+                                softServeRow = row;
+                            }
+                            if (centerName === 'Novelties-Boxed') {
+                                noveltiesRow = row;
+                            }
+                        }
+
                         columnIndices.forEach(function(index) {
                             var td = document.createElement('td');
                             if (index !== -1) {
@@ -377,6 +361,50 @@
                         });
                         tbody.appendChild(tr);
                     });
+
+                    // If 'Revenue Centers', compute 'Soft Serve + Novelties' and add a row
+                    if (sectionName === 'Revenue Centers') {
+                        var totalIndex = headers.indexOf('Total');
+
+                        var getTotalValue = function(row) {
+                            if (row && totalIndex !== -1) {
+                                var totalCell = row[totalIndex];
+                                if (totalCell) {
+                                    var totalValue = parseFloat(totalCell.replace(/[^0-9.-]+/g,""));
+                                    if (!isNaN(totalValue)) {
+                                        return totalValue;
+                                    }
+                                }
+                            }
+                            return 0;
+                        };
+
+                        softServeTotal = getTotalValue(softServeRow);
+                        noveltiesBoxedTotal = getTotalValue(noveltiesRow);
+                        var softServeNoveltiesTotal = softServeTotal + noveltiesBoxedTotal;
+
+                        // Create a new row for 'Soft Serve + Novelties'
+                        var tr = document.createElement('tr');
+
+                        // We need to create tds for each column as per desiredColumns
+                        desiredColumns.forEach(function(columnName, idx) {
+                            var td = document.createElement('td');
+                            if (columnName === 'Name') {
+                                td.innerText = 'Soft Serve + Novelties';
+                                td.style.fontWeight = 'bold';
+                            } else if (columnName === 'Total') {
+                                td.innerText = '$' + softServeNoveltiesTotal.toFixed(2);
+                                td.style.fontWeight = 'bold';
+                            } else {
+                                td.innerText = ''; // Empty for other columns
+                            }
+                            tr.appendChild(td);
+                        });
+
+                        // Optionally, style the row to distinguish it
+                        tr.style.backgroundColor = '#f0f0f0'; // Light gray background
+                        tbody.appendChild(tr);
+                    }
 
                     table.appendChild(tbody);
                     reportDiv.appendChild(table);
